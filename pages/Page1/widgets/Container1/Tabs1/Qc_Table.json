@@ -58,10 +58,12 @@
     "isescalation",
     "stakeholder_ratings",
     "ai_tag",
+    "qc_start",
     "qc_passed",
     "qc_tag",
     "qc_description",
-    "qc_notes"
+    "qc_notes",
+    "qc_time_difference"
   ],
   "columnUpdatedAt": 1788419429726,
   "columnWidthMap": {
@@ -191,6 +193,9 @@
       "key": "primaryColumns.qc_passed.buttonLabel"
     },
     {
+      "key": "primaryColumns.qc_passed.isDisabled"
+    },
+    {
       "key": "primaryColumns.qc_tag.computedValue"
     },
     {
@@ -200,17 +205,44 @@
       "key": "primaryColumns.qc_notes.computedValue"
     },
     {
-      "key": "primaryColumns.qc_tag.menuButtonLabel"
+      "key": "primaryColumns.qc_time_difference.computedValue"
+    },
+    {
+      "key": "primaryColumns.qc_start.borderRadius"
+    },
+    {
+      "key": "primaryColumns.qc_start.boxShadow"
+    },
+    {
+      "key": "primaryColumns.qc_start.buttonColor"
+    },
+    {
+      "key": "primaryColumns.qc_start.buttonLabel"
+    },
+    {
+      "key": "primaryColumns.qc_start.computedValue"
+    },
+    {
+      "key": "primaryColumns.qc_start.isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.qc_passed.isDisabled"
+    },
+    {
+      "key": "primaryColumns.qc_start.isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
     {
       "key": "primaryColumns.qc_passed.onClick"
+    },
+    {
+      "key": "primaryColumns.qc_start.onClick"
     }
   ],
   "enableClientSideSearch": true,
@@ -649,7 +681,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_description\"]))}}",
+      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (currentRow.qc_logs && currentRow.qc_logs.length) ? currentRow.qc_logs[currentRow.qc_logs.length - 1].qc_description : currentRow[\"qc_description\"]))}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -683,7 +715,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_notes\"]))}}",
+      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (currentRow.qc_logs && currentRow.qc_logs.length) ? currentRow.qc_logs[currentRow.qc_logs.length - 1].qc_notes : currentRow[\"qc_notes\"]))}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -711,6 +743,77 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
+    "qc_time_difference": {
+      "alias": "qc_time_difference",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "number",
+      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (currentRow.qc_logs || []).reduce((sum, log) => sum + (Number(log.time_difference) || 0), 0)))}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "RIGHT",
+      "id": "qc_time_difference",
+      "index": 31,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": true,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "QC Time (min)",
+      "notation": "standard",
+      "originalId": "qc_time_difference",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "qc_start": {
+      "alias": "qc_start",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "borderRadius": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
+      "boxShadow": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
+      "buttonColor": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
+      "buttonLabel": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( \"QC Start\"))}}",
+      "columnType": "button",
+      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (currentRow.qc_logs && currentRow.qc_logs.length) ? currentRow.qc_logs[currentRow.qc_logs.length - 1].qc_start_time : \"\"))}}",
+      "currencyCode": "USD",
+      "customAlias": "",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "qc_start",
+      "index": 26,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": true,
+      "isDisabled": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (currentRow.qc_logs && currentRow.qc_logs.length && !currentRow.qc_logs[currentRow.qc_logs.length - 1].qc_end_time) ))}}",
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "QC Start",
+      "notation": "standard",
+      "onClick": "{{qc_start.run().then(() => {\n  Normal.run();\n}).catch((error) => {\n  showAlert(\"Failed to start QC: \" + error.message, \"error\");\n});}}",
+      "originalId": "qc_start",
+      "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
     "qc_passed": {
       "alias": "qc_passed",
       "allowCellWrapping": false,
@@ -718,7 +821,7 @@
       "borderRadius": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
       "boxShadow": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
       "buttonColor": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
-      "buttonLabel": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( currentRow.qc_passed || \"__\"))}}",
+      "buttonLabel": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( \"Review\"))}}",
       "columnType": "button",
       "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_passed\"]))}}",
       "currencyCode": "USD",
@@ -732,7 +835,7 @@
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
-      "isDisabled": false,
+      "isDisabled": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( !((currentRow.qc_logs && currentRow.qc_logs.length && !currentRow.qc_logs[currentRow.qc_logs.length - 1].qc_end_time)) ))}}",
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
@@ -754,17 +857,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_tag\"]))}}",
-      "configureMenuItems": {
-        "config": {
-          "id": "config",
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "Menu Item"
-        },
-        "id": "config",
-        "label": "Configure menu items"
-      },
+      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( (currentRow.qc_logs && currentRow.qc_logs.length) ? currentRow.qc_logs[currentRow.qc_logs.length - 1].qc_tag : currentRow[\"qc_tag\"]))}}",
       "currencyCode": "USD",
       "customAlias": "",
       "decimals": 0,
@@ -783,69 +876,8 @@
       "isSaveVisible": true,
       "isVisible": true,
       "label": "QC Tag",
-      "menuButtonLabel": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => ( currentRow.qc_tag || ))}}",
-      "menuItems": {
-        "menuItembhc7cf2r98": {
-          "id": "menuItembhc7cf2r98",
-          "index": 0,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "ASK NOT CLARIFIED",
-          "widgetId": "6qpkyxu0hw"
-        },
-        "menuIteml310c4emol": {
-          "id": "menuIteml310c4emol",
-          "index": 3,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "AI  MISINTERPRET",
-          "widgetId": "hlipoahel0"
-        },
-        "menuItemqcgzhof0fd": {
-          "id": "menuItemqcgzhof0fd",
-          "index": 1,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "ASK MISUNDERSTOOD",
-          "widgetId": "faths5q2jw"
-        },
-        "menuItemt8wzihien5": {
-          "id": "menuItemt8wzihien5",
-          "index": 2,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "PROMPT UNCLEAR",
-          "widgetId": "s0vqg66daf"
-        },
-        "menuItemv79pp04n53": {
-          "id": "menuItemv79pp04n53",
-          "index": 4,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "DATA STALE",
-          "widgetId": "2dkn0b5lul"
-        },
-        "menuItemwcp6ohm7do": {
-          "id": "menuItemwcp6ohm7do",
-          "index": 6,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "COPY PASTE / TYPE ERROR",
-          "widgetId": "7ladob8w7l"
-        },
-        "menuItemx240fg9l2r": {
-          "id": "menuItemx240fg9l2r",
-          "index": 5,
-          "isDisabled": false,
-          "isVisible": true,
-          "label": "DATA QUALITY",
-          "widgetId": "sifwo7jqz8"
-        }
-      },
-      "menuItemsSource": "STATIC",
       "notation": "standard",
       "originalId": "qc_tag",
-      "sourceData": [],
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -1294,7 +1326,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "searchKey": "",
-  "tableData": "{{\n  Normal.data\n    .filter(row => \n      !Select3.selectedOptionValue || \n      row.category === Select3.selectedOptionValue\n    )\n    .sort((a, b) => new Date(b.closedat) - new Date(a.closedat))\n}}",
+  "tableData": "{{\n  Normal.data\n    .filter(row =>\n      row.status === \"Completed\" &&\n      (!Select3.selectedOptionValue ||\n      row.category === Select3.selectedOptionValue)\n    )\n    .sort((a, b) => new Date(b.closedat) - new Date(a.closedat))\n}}",
   "textSize": "0.875rem",
   "topRow": 8,
   "totalRecordsCount": 0,

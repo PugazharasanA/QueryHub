@@ -1,7 +1,30 @@
-UPDATE public."tickets" SET
+WITH current_ticket AS (
+  SELECT COALESCE(qc_logs, '[]'::jsonb) AS logs
+  FROM public.tickets
+  WHERE ticked_id = '{{Qc_Table.triggeredRow.ticked_id}}'
+)
+UPDATE public."tickets" t SET
 "qc_passed" = '{{ qctag.selectedOptionValue }}',
 "qc_tag" = '{{ qc_tag_reason.selectedOptionValue }}',
 "qc_description" = '{{ qc_description.text }}',
-"qc_notes" = '{{ qc_remarks.text }}'
-  WHERE ticked_id ='{{Qc_Table.triggeredRow.ticked_id}}'
-  RETURNING ticked_id;
+"qc_notes" = '{{ qc_remarks.text }}',
+"status" = CASE WHEN '{{ qctag.selectedOptionValue }}' = 'Yes' THEN t.status ELSE 'onProgress' END,
+"qc_logs" = jsonb_set(
+  c.logs,
+  ARRAY[(jsonb_array_length(c.logs) - 1)::text],
+  (c.logs -> (jsonb_array_length(c.logs) - 1)) || jsonb_build_object(
+    'qc_end_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS'),
+    'qc_passed', '{{ qctag.selectedOptionValue }}',
+    'qc_tag', '{{ qc_tag_reason.selectedOptionValue }}',
+    'qc_description', '{{ qc_description.text }}',
+    'qc_notes', '{{ qc_remarks.text }}',
+    'time_difference', calculate_office_minutesd(
+      (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'qc_start_time')::timestamp,
+      (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp
+    )
+  )
+)
+FROM current_ticket c
+WHERE t.ticked_id ='{{Qc_Table.triggeredRow.ticked_id}}'
+  AND jsonb_array_length(c.logs) > 0
+RETURNING t.ticked_id;
