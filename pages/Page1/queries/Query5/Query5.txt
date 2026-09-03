@@ -1,0 +1,1 @@
+SELECT * FROM public."compliance_ticket_system" LIMIT 10;
