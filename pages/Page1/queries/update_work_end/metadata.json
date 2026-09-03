@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "UPDATE tickets\nSET \n  work_end_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',\n  status = '{{ updatestatus.selectedOptionValue }}',\n  closedat = CASE \n    WHEN '{{ updatestatus.selectedOptionValue }}' = 'Completed' \n      THEN CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata'\n    ELSE closedat\n  END\nWHERE \n  (ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}');",
+      "body": "UPDATE tickets\nSET\n  work_end_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',\n  status = 'Completed',\n  closedat = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata'\nWHERE\n  (ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}');",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
