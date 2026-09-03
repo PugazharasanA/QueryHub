@@ -13,11 +13,11 @@ UPDATE public."tickets" t SET
   c.logs,
   ARRAY[(jsonb_array_length(c.logs) - 1)::text],
   (c.logs -> (jsonb_array_length(c.logs) - 1)) || jsonb_build_object(
-    'qc_end_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS'),
-    'qc_passed', '{{ qctag.selectedOptionValue }}',
-    'qc_tag', '{{ qc_tag_reason.selectedOptionValue }}',
-    'qc_description', '{{ qc_description.text }}',
-    'qc_notes', '{{ qc_remarks.text }}',
+    'qc_end_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS')::text,
+    'qc_passed', '{{ qctag.selectedOptionValue }}'::text,
+    'qc_tag', '{{ qc_tag_reason.selectedOptionValue }}'::text,
+    'qc_description', '{{ qc_description.text }}'::text,
+    'qc_notes', '{{ qc_remarks.text }}'::text,
     'time_difference', calculate_office_minutesd(
       (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'qc_start_time')::timestamp,
       (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp
