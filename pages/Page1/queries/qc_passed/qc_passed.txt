@@ -1,7 +1,7 @@
 UPDATE public."tickets" SET
 "qc_passed" = '{{ qctag.selectedOptionValue }}',
 "qc_tag" = '{{ qc_tag_reason.selectedOptionValue }}',
-"qc_description" = '{{ QcTagMap.getDescription(qc_tag_reason.selectedOptionValue) }}',
-"qc_notes" = '{{ qc_remarks.text.replace(/'/g, "''") }}'
+"qc_description" = '{{ qc_description.text }}',
+"qc_notes" = '{{ qc_remarks.text }}'
   WHERE ticked_id ='{{Qc_Table.triggeredRow.ticked_id}}'
   RETURNING ticked_id;
