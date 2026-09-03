@@ -6,6 +6,11 @@
     "pageId": "Page1",
     "pluginId": "js-plugin",
     "pluginType": "JS",
-    "variables": []
+    "variables": [
+      {
+        "name": "descriptions",
+        "value": "{\n  \"ASK-NOT-CLARIFIED\": \"Analyst had scope for doubt on the ask but proceeded without clarifying\",\n  \"ASK-MISUNDERSTOOD\": \"Analyst misunderstood the ask despite no perceived ambiguity\",\n  \"PROMPT-UNCLEAR\": \"Prompt given to Claude didn't clearly/fully capture the ask\",\n  \"AI-MISINTERPRET\": \"Claude misunderstood the prompt or generated incorrect logic/output\",\n  \"DATA-STALE\": \"Source data was outdated at time of processing\",\n  \"DATA-QUALITY\": \"Source data had nulls, duplicates, wrong types, or other quality issues\",\n  \"COPY-PASTE/TYPO-ERROR\": \"Manual error while copying, typing, or transcribing values\"\n}"
+      }
+    ]
   }
 }

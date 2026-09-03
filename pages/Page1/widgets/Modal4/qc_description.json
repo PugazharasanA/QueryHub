@@ -3,7 +3,7 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 32,
+  "bottomRow": 29,
   "boxShadow": "none",
   "defaultText": "{{QcTagMap.getDescription(qc_tag_reason.selectedOptionValue)}}",
   "dynamicBindingPathList": [
@@ -44,6 +44,8 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 22,
   "needsErrorInfo": false,
+  "originalBottomRow": 32,
+  "originalTopRow": 22,
   "parentColumnSpace": 6.9375,
   "parentId": "spbx168aa1",
   "parentRowSpace": 10,
