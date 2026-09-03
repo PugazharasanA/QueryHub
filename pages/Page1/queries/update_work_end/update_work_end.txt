@@ -1,11 +1,7 @@
 UPDATE tickets
-SET 
+SET
   work_end_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
-  status = '{{ updatestatus.selectedOptionValue }}',
-  closedat = CASE 
-    WHEN '{{ updatestatus.selectedOptionValue }}' = 'Completed' 
-      THEN CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata'
-    ELSE closedat
-  END
-WHERE 
+  status = 'Completed',
+  closedat = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata'
+WHERE
   (ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}');

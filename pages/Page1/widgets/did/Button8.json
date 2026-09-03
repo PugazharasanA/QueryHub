@@ -32,7 +32,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{didby.run().then(() => {\n  showAlert('Database Updated', '');\n  Normal.run();\n  closeModal(did.name);\n  resetWidget(\"done\", true);\n});}}",
+  "onClick": "{{didby.run().then(() => {\n  showAlert('Database Updated', '');\n  Normal.run();\n  closeModal(did.name);\n  resetWidget(\"done\", true);\n}).catch((error) => {\n  showAlert(\"Failed to update: \" + error.message, \"error\");\n});}}",
   "parentId": "90oh5qwnhw",
   "placement": "CENTER",
   "recaptchaType": "V3",

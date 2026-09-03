@@ -32,7 +32,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{categoryupdate.run().then(() => {\n  showAlert('Category Updated', 'success');\n  Normal.run();\n  closeModal(CategoryModal.name);\n  resetWidget(\"CategoryInput\", true);\n});}}",
+  "onClick": "{{(async () => {\n  try {\n    if (!CategoryInput.selectedOptionValue) {\n      showAlert(\"Please select a category.\", \"error\");\n      return;\n    }\n    const result = await categoryupdate.run();\n    if (result && result.length > 0) {\n      showAlert(\"Category Updated\", \"success\");\n    } else {\n      showAlert(\"No ticket found to update.\", \"error\");\n    }\n    Normal.run();\n    closeModal(CategoryModal.name);\n    resetWidget(\"CategoryInput\", true);\n  } catch (error) {\n    showAlert(\"Failed to update category: \" + error.message, \"error\");\n  }\n})();}}",
   "parentId": "833uatl3vr",
   "placement": "CENTER",
   "recaptchaType": "V3",
