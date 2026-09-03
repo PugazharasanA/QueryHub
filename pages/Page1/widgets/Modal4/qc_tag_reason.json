@@ -1,0 +1,59 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 21,
+  "boxShadow": "none",
+  "defaultOptionValue": "",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "isDisabled": false,
+  "isFilterable": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "kqt3vb9m2x",
+  "labelAlignment": "left",
+  "labelPosition": "Top",
+  "labelText": "QC Tag",
+  "labelTextSize": "0.875rem",
+  "labelWidth": 5,
+  "leftColumn": 0,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 21,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 14,
+  "needsErrorInfo": false,
+  "optionLabel": "name",
+  "optionValue": "code",
+  "parentColumnSpace": 6.9375,
+  "parentId": "spbx168aa1",
+  "parentRowSpace": 10,
+  "placeholderText": "Select QC tag",
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 64,
+  "serverSideFiltering": false,
+  "sourceData": "[\n  { \"name\": \"ASK-NOT-CLARIFIED\", \"code\": \"ASK-NOT-CLARIFIED\" },\n  { \"name\": \"ASK-MISUNDERSTOOD\", \"code\": \"ASK-MISUNDERSTOOD\" },\n  { \"name\": \"PROMPT-UNCLEAR\", \"code\": \"PROMPT-UNCLEAR\" },\n  { \"name\": \"AI-MISINTERPRET\", \"code\": \"AI-MISINTERPRET\" },\n  { \"name\": \"DATA-STALE\", \"code\": \"DATA-STALE\" },\n  { \"name\": \"DATA-QUALITY\", \"code\": \"DATA-QUALITY\" },\n  { \"name\": \"COPY-PASTE/TYPO-ERROR\", \"code\": \"COPY-PASTE/TYPO-ERROR\" }\n]",
+  "topRow": 14,
+  "type": "SELECT_WIDGET",
+  "version": 1,
+  "widgetId": "qtg7fa2k1p",
+  "widgetName": "qc_tag_reason"
+}
