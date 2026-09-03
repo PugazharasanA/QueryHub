@@ -200,30 +200,6 @@
       "key": "primaryColumns.requested_time.computedValue"
     },
     {
-      "key": "primaryColumns.work_start_time.buttonColor"
-    },
-    {
-      "key": "primaryColumns.work_start_time.borderRadius"
-    },
-    {
-      "key": "primaryColumns.work_start_time.boxShadow"
-    },
-    {
-      "key": "primaryColumns.work_start_time.buttonLabel"
-    },
-    {
-      "key": "primaryColumns.work_end_time.buttonColor"
-    },
-    {
-      "key": "primaryColumns.work_end_time.borderRadius"
-    },
-    {
-      "key": "primaryColumns.work_end_time.boxShadow"
-    },
-    {
-      "key": "primaryColumns.work_end_time.buttonLabel"
-    },
-    {
       "key": "primaryColumns.doneby.buttonColor"
     },
     {
@@ -286,12 +262,6 @@
       "key": "primaryColumns.approvedby.isDisabled"
     },
     {
-      "key": "primaryColumns.work_start_time.onClick"
-    },
-    {
-      "key": "primaryColumns.work_end_time.onClick"
-    },
-    {
       "key": "primaryColumns.qc_passed.isCellVisible"
     }
   ],
@@ -304,12 +274,6 @@
     },
     {
       "key": "primaryColumns.status.onClick"
-    },
-    {
-      "key": "primaryColumns.work_start_time.onClick"
-    },
-    {
-      "key": "primaryColumns.work_end_time.onClick"
     },
     {
       "key": "primaryColumns.doneby.onClick"
