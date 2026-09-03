@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "UPDATE public.\"tickets\" SET\n\"qc_passed\" = '{{ qctag.selectedOptionValue }}'\n  WHERE ticked_id ='{{Qc_Table.triggeredRow.ticked_id}}';",
+      "body": "UPDATE public.\"tickets\" SET\n\"qc_passed\" = '{{ qctag.selectedOptionValue }}',\n\"qc_tag\" = '{{ qc_tag_reason.selectedOptionValue }}',\n\"qc_description\" = '{{ QcTagMap.getDescription(qc_tag_reason.selectedOptionValue) }}',\n\"qc_notes\" = '{{ qc_remarks.text.replace(/'/g, \"''\") }}'\n  WHERE ticked_id ='{{Qc_Table.triggeredRow.ticked_id}}'\n  RETURNING ticked_id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
