@@ -11,6 +11,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -24,7 +27,7 @@
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
-  "isVisible": true,
+  "isVisible": "{{qctag.selectedOptionValue === \"No\"}}",
   "key": "kqt3vb9m2x",
   "labelAlignment": "left",
   "labelPosition": "Top",

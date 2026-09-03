@@ -18,6 +18,9 @@
     },
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -27,7 +30,7 @@
   "isDisabled": true,
   "isLoading": false,
   "isRequired": false,
-  "isVisible": true,
+  "isVisible": "{{qctag.selectedOptionValue === \"No\"}}",
   "key": "kqd8pl1n4y",
   "label": "Description (auto-filled from QC Tag)",
   "labelAlignment": "left",

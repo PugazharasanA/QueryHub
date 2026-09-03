@@ -5,8 +5,8 @@ WITH current_ticket AS (
 )
 UPDATE public."tickets" t SET
 "qc_passed" = '{{ qctag.selectedOptionValue }}',
-"qc_tag" = '{{ qc_tag_reason.selectedOptionValue }}',
-"qc_description" = '{{ qc_description.text }}',
+"qc_tag" = CASE WHEN '{{ qctag.selectedOptionValue }}' = 'No' THEN '{{ qc_tag_reason.selectedOptionValue }}' ELSE NULL END,
+"qc_description" = CASE WHEN '{{ qctag.selectedOptionValue }}' = 'No' THEN '{{ qc_description.text }}' ELSE NULL END,
 "qc_notes" = '{{ qc_remarks.text }}',
 "status" = CASE WHEN '{{ qctag.selectedOptionValue }}' = 'Yes' THEN t.status ELSE 'onProgress' END,
 "qc_logs" = jsonb_set(
@@ -15,8 +15,8 @@ UPDATE public."tickets" t SET
   (c.logs -> (jsonb_array_length(c.logs) - 1)) || jsonb_build_object(
     'qc_end_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS')::text,
     'qc_passed', '{{ qctag.selectedOptionValue }}'::text,
-    'qc_tag', '{{ qc_tag_reason.selectedOptionValue }}'::text,
-    'qc_description', '{{ qc_description.text }}'::text,
+    'qc_tag', (CASE WHEN '{{ qctag.selectedOptionValue }}' = 'No' THEN '{{ qc_tag_reason.selectedOptionValue }}' ELSE NULL END)::text,
+    'qc_description', (CASE WHEN '{{ qctag.selectedOptionValue }}' = 'No' THEN '{{ qc_description.text }}' ELSE NULL END)::text,
     'qc_notes', '{{ qc_remarks.text }}'::text,
     'time_difference', calculate_office_minutesd(
       (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'qc_start_time')::timestamp,

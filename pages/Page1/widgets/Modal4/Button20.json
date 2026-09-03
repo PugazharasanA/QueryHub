@@ -32,7 +32,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 44,
   "needsErrorInfo": false,
-  "onClick": "{{(async () => {\n  try {\n    if (!qc_tag_reason.selectedOptionValue) {\n      showAlert(\"Please select a QC tag.\", \"error\");\n      return;\n    }\n    const result = await qc_passed.run();\n    if (result && result.length > 0) {\n      showAlert(\"QC Updated\", \"success\");\n    } else {\n      showAlert(\"No ticket found to update.\", \"error\");\n    }\n    Normal.run();\n    closeModal(Modal4.name);\n    resetWidget(\"qctag\", true);\n    resetWidget(\"qc_tag_reason\", true);\n    resetWidget(\"qc_remarks\", true);\n  } catch (error) {\n    showAlert(\"Failed to update QC: \" + error.message, \"error\");\n  }\n})();}}",
+  "onClick": "{{(async () => {\n  try {\n    if (!qctag.selectedOptionValue) {\n      showAlert(\"Please select Yes or No.\", \"error\");\n      return;\n    }\n    if (qctag.selectedOptionValue === \"No\" && !qc_tag_reason.selectedOptionValue) {\n      showAlert(\"Please select a QC tag.\", \"error\");\n      return;\n    }\n    const result = await qc_passed.run();\n    if (result && result.length > 0) {\n      showAlert(\"QC Updated\", \"success\");\n    } else {\n      showAlert(\"No ticket found to update.\", \"error\");\n    }\n    Normal.run();\n    closeModal(Modal4.name);\n    resetWidget(\"qctag\", true);\n    resetWidget(\"qc_tag_reason\", true);\n    resetWidget(\"qc_remarks\", true);\n  } catch (error) {\n    showAlert(\"Failed to update QC: \" + error.message, \"error\");\n  }\n})();}}",
   "originalBottomRow": 48,
   "originalTopRow": 44,
   "parentId": "spbx168aa1",
