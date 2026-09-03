@@ -1,0 +1,14 @@
+SELECT 
+    TO_CHAR(closedat, 'Mon-YYYY') AS txnmonth,
+    COUNT(ticked_id) AS total_insights,
+    ROUND(AVG(NULLIF(rating, '')::numeric), 2) AS avg_internal_rating,
+    COUNT(ticked_id) FILTER (WHERE stakeholder_ratings IS NOT NULL AND stakeholder_ratings <> '') AS stakeholder_rated_tickets,
+    ROUND(AVG(NULLIF(stakeholder_ratings, '')::NUMERIC), 2) AS avg_stakeholder_rating
+FROM public.tickets
+WHERE category = 'Insights'
+AND closedat >= '2026-04-01' And status='Completed'
+AND (
+    '{{doneCopy.selectedOptionValue}}' = ''
+    OR doneby = '{{doneCopy.selectedOptionValue}}'
+)
+GROUP BY TO_CHAR(closedat, 'Mon-YYYY'), DATE_TRUNC('month', closedat);

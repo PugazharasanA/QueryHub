@@ -1,0 +1,11 @@
+SELECT 
+    ticked_id,
+    ai_tag,
+    LENGTH(ai_tag) AS ai_tag_len,
+    '[' || ai_tag || ']' AS ai_tag_bracketed,  -- reveals hidden spaces
+    closedat,
+    category,
+    requested_time,
+    doneby
+FROM public."tickets"
+WHERE ai_tag ILIKE '%partial%success%';

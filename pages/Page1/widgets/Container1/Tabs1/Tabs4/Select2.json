@@ -1,0 +1,70 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 7,
+  "boxShadow": "none",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n(() => {\n  const today = new Date();\n  const year = today.getFullYear();\n  const month = today.getMonth() + 1;\n  return `${year}-${String(month).padStart(2, '0')}`;\n})()\n))(Select2.options, Select2.serverSideFiltering) }}",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "sourceData"
+    },
+    {
+      "key": "defaultOptionValue"
+    }
+  ],
+  "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "sourceData"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onOptionChange"
+    }
+  ],
+  "isDisabled": false,
+  "isFilterable": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "ubo0am930u",
+  "labelAlignment": "left",
+  "labelPosition": "Top",
+  "labelText": "Month",
+  "labelTextSize": "0.875rem",
+  "labelWidth": 5,
+  "leftColumn": 0,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 7,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 0,
+  "needsErrorInfo": false,
+  "onOptionChange": "{{appsmith_logs.getHTML();\nTotal_Users_and_active_users.run();}}",
+  "optionLabel": "label",
+  "optionValue": "value",
+  "parentColumnSpace": 19.59375,
+  "parentId": "5fcjj7idrv",
+  "parentRowSpace": 10,
+  "placeholderText": "Select option",
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 17,
+  "serverSideFiltering": false,
+  "sourceData": "{{\n(() => {\n  const today = new Date();\n  const year = today.getFullYear();\n  const month = today.getMonth() + 1;\n\n  const fiscalStartYear = month >= 4 ? year : year - 1;\n\n  const months = [];\n  let y = fiscalStartYear;\n  let m = 4; // April start\n\n  while (y < year || (y === year && m <= month)) {\n    const val = `${y}-${String(m).padStart(2, '0')}`;\n    months.push({ label: val, value: val });\n    m++;\n    if (m > 12) { m = 1; y++; }\n  }\n\n  return months;\n})()\n}}",
+  "topRow": 0,
+  "type": "SELECT_WIDGET",
+  "version": 1,
+  "widgetId": "ul3kfpmnka",
+  "widgetName": "Select2"
+}

@@ -1,0 +1,3 @@
+UPDATE public."tickets" SET
+"ai_tag" = '{{ updateaitag.selectedOptionValue }}'
+  WHERE ticked_id = '{{TicketsCompletedMIS.triggeredRow.ticked_id}}'; 

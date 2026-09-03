@@ -1,0 +1,42 @@
+UPDATE public."tickets"
+SET 
+  status = '{{ updatestatus.selectedOptionValue }}',
+
+  file_link = CASE 
+    WHEN '{{ updatestatus.selectedOptionValue }}' = 'Completed' THEN '{{ url.text }}'
+    WHEN '{{ updatestatus.selectedOptionValue }}' IN ('onProgress', 'Pending') THEN NULL
+    ELSE file_link
+  END,
+
+  closedat = CASE 
+    WHEN '{{ updatestatus.selectedOptionValue }}' = 'Completed' THEN CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata'
+    WHEN '{{ updatestatus.selectedOptionValue }}' IN ('onProgress', 'Pending') THEN NULL
+    ELSE closedat
+  END,
+
+  time_difference = CASE 
+    WHEN '{{ updatestatus.selectedOptionValue }}' = 'Completed' 
+    THEN calculate_office_minutes(createdat, CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')
+    ELSE time_difference
+  END
+
+WHERE 
+  (
+    (email = '{{ Tickets.triggeredRow.email }}' AND ticked_id = '{{ Tickets.triggeredRow.ticked_id }}')
+    OR
+    (email = '{{ TicketsonProgress.triggeredRow.email }}' AND ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}')
+    OR
+    (email = '{{ TicketsCompletedMIS.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedMIS.triggeredRow.ticked_id }}')
+  )OR
+    (email = '{{ TicketsCompletedInsights.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedInsights.triggeredRow.ticked_id }}')
+  )
+	OR
+    (email = '{{ TicketsCompletedDashboard.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedDashboard.triggeredRow.ticked_id }}')
+  )
+	OR
+	(email = '{{ TicketsCompletedAutomation.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedAutomation.triggeredRow.ticked_id }}')
+  )
+	OR
+    (email = '{{ TicketsCompletedAI.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedAI.triggeredRow.ticked_id }}')
+  )
+	;

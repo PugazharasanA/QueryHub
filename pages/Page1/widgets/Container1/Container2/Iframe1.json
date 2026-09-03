@@ -1,0 +1,37 @@
+{
+  "animateLoading": true,
+  "borderOpacity": "1",
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "borderWidth": "",
+  "bottomRow": 8,
+  "boxShadow": "none",
+  "dynamicBindingPathList": [
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicTriggerPathList": [],
+  "flexVerticalAlignment": "start",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "7l9qznofzh",
+  "leftColumn": 2,
+  "mobileBottomRow": 33,
+  "mobileLeftColumn": 26,
+  "mobileRightColumn": 50,
+  "mobileTopRow": 1,
+  "needsErrorInfo": false,
+  "parentColumnSpace": 19.46875,
+  "parentId": "wb2pmoo9rs",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 53,
+  "source": "https://www.example.com",
+  "srcDoc": "<div style=\"font-family: Inter, Arial, sans-serif; color: white;\">\n  <style>\n    .brand-title {\n      font-size: 20px;\n      font-weight: 600;\n      line-height: 0.8;\n      margin: 0;\n      white-space: nowrap;\n      letter-spacing: -1px;\n    }\n\n    .brand-title span {\n      display: inline-block;\n      opacity: 0;\n      animation: fadeLetter 0.6s ease forwards;\n    }\n\n    .tagline {\n      font-size: 13px;\n      font-weight: 500;\n      letter-spacing: 2px;\n      line-height: 1.4;\n      margin-top: 4px;\n    }\n\n    @keyframes fadeLetter {\n      from {\n        opacity: 0;\n        transform: translateY(6px);\n      }\n      to {\n        opacity: 1;\n        transform: translateY(0);\n      }\n    }\n  </style>\n\n  <!-- Animated Title -->\n  <div class=\"brand-title\">\n    <span style=\"animation-delay: 0s;\">Q</span>\n    <span style=\"animation-delay: 0.05s;\">u</span>\n    <span style=\"animation-delay: 0.10s;\">e</span>\n    <span style=\"animation-delay: 0.15s;\">r</span>\n    <span style=\"animation-delay: 0.20s;\">y</span>\n\n    <span style=\"animation-delay: 0.25s;\">&nbsp;</span>\n\n    <span style=\"animation-delay: 0.30s;\">H</span>\n    <span style=\"animation-delay: 0.35s;\">u</span>\n    <span style=\"animation-delay: 0.40s;\">b</span>\n  </div>\n\n  <!-- Tagline -->\n  <div class=\"tagline\">\n    Manage, Track & Resolve Queries Smarter\n  </div>\n</div>",
+  "topRow": 1,
+  "type": "IFRAME_WIDGET",
+  "version": 1,
+  "widgetId": "rshhgu9lcu",
+  "widgetName": "Iframe1"
+}

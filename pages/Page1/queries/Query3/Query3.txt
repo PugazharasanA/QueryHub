@@ -1,0 +1,1 @@
+SELECT n8n_workflow_name, run_completed_at, issuccess, run_start_at FROM public."trigger_logs" LIMIT 10;

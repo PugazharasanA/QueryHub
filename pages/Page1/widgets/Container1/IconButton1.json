@@ -1,0 +1,49 @@
+{
+  "animateLoading": true,
+  "borderRadius": "1.5rem",
+  "bottomRow": 14,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "PRIMARY",
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "iconName": "refresh",
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "v16ojvet5y",
+  "leftColumn": 60,
+  "minWidth": 50,
+  "mobileBottomRow": 6,
+  "mobileLeftColumn": 58,
+  "mobileRightColumn": 62,
+  "mobileTopRow": 2,
+  "needsErrorInfo": false,
+  "onClick": "{{\nawait Promise.all([\n\tNormal.run(),\n\tworkflows.run(),\n\tinsights_stats_pivot.getHTML(),\n\tmis_stats_pivot.getHTML(),\n\tappsmith_logs.getHTML(),\n\tworfkflow_logs.getHTML(),\n\tworkflogs_logsstats.mergeSummary(),\n\tTotal_Users_and_active_users.run()\n\n])\n}}",
+  "originalBottomRow": 14,
+  "originalTopRow": 10,
+  "parentColumnSpace": 19.5625,
+  "parentId": "5wb8xkxvr3",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "hug",
+  "rightColumn": 62,
+  "topRow": 10,
+  "type": "ICON_BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "5ih9nl5dte",
+  "widgetName": "IconButton1"
+}

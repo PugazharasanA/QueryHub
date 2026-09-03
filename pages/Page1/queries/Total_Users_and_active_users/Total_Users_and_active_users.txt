@@ -1,0 +1,119 @@
+WITH total_users AS (
+	SELECT 
+	count(DISTINCT dashboard) as total_dashboards,
+	COUNT(DISTINCT user_email) AS total_unique_users
+	FROM (
+		SELECT DISTINCT ON (rt.user_email, rt.dashboard)
+		rt.user_email,
+		rt.dashboard,
+		rt.workspace,
+		rt.can_login,
+		rt.updated_at
+		FROM public."appsmith_role_tracker" rt
+		INNER JOIN public.asset_registry ar 
+		ON rt.dashboard = ar.asset_name
+		AND ar.asset_type = 'Dashboard'
+		AND (
+			'{{doneCopy.selectedOptionValue}}' = ''
+			OR ar.ownership = '{{doneCopy.selectedOptionValue}}'
+		)
+		WHERE rt.user_email NOT IN (
+			'pugazharasan.a@assetplus.io', 
+			'awanish@assetplus.io',
+			'vishranth@assetplus.io',
+			'vetrivel.g@assetplus.io',
+			'vignesh.k@assetplus.io',
+			'saimohan.s@assetplus.io'
+		)
+		AND TO_CHAR(rt.updated_at, 'YYYY-MM') <= '{{Select2.selectedOptionValue}}'
+		ORDER BY rt.user_email, rt.dashboard, rt.updated_at DESC
+	) latest_records
+	WHERE can_login = true
+	AND dashboard NOT IN ('brokerage-consolidate-report')
+	AND workspace <> 'TESTING CONTEST DASHBOARD'
+),
+-- ✅ Step 1: Compute median per dashboard
+dashboard_medians AS (
+	SELECT 
+	qm.dashboard,
+	ROUND(
+		(
+			PERCENTILE_CONT(0.50)
+			WITHIN GROUP (ORDER BY execution_time_ms)
+			FILTER (WHERE execution_time_ms > 0)
+		)::numeric / 1000.0,
+		2
+	) AS median_time_seconds
+	FROM public."appsmith_query_monitor" qm
+	INNER JOIN public.asset_registry ar 
+	ON qm.dashboard = ar.asset_name
+	AND ar.asset_type = 'Dashboard'
+	AND (
+		'{{doneCopy.selectedOptionValue}}' = ''
+		OR ar.ownership = '{{doneCopy.selectedOptionValue}}'
+	)
+	WHERE qm.user_email NOT IN (
+		'pugazharasan.a@assetplus.io', 
+		'awanish@assetplus.io',
+		'vishranth@assetplus.io',
+		'vetrivel.g@assetplus.io',
+		'vignesh.k@assetplus.io',
+		'saimohan.s@assetplus.io'
+	)
+	AND TO_CHAR(qm.triggered_at, 'YYYY-MM') = '{{Select2.selectedOptionValue}}'
+	AND qm.dashboard <> 'brokerage-consolidate-report' and qm.dashboard <>'b2b-rm-kpi-sales'
+	GROUP BY qm.dashboard
+),
+-- ✅ Step 2: Count only dashboards where median > 5 seconds
+slow_dashboards AS (
+	SELECT COUNT(*) AS slow_dashboard_count
+	FROM dashboard_medians
+	WHERE median_time_seconds > 5
+),
+active_users AS (
+	SELECT 
+	COUNT(DISTINCT qm.user_email) AS active_users,
+	ROUND(
+		(
+			PERCENTILE_CONT(0.50)
+			WITHIN GROUP (ORDER BY execution_time_ms)
+			FILTER (WHERE execution_time_ms > 0)
+		)::numeric / 1000.0,
+		2
+	) AS median_time_seconds,
+	ROUND(
+		(
+			PERCENTILE_CONT(0.90)
+			WITHIN GROUP (ORDER BY execution_time_ms)
+		)::numeric / 1000.0,
+		2
+	) AS p90_time_seconds
+	FROM public."appsmith_query_monitor" qm
+	INNER JOIN public.asset_registry ar 
+	ON qm.dashboard = ar.asset_name
+	AND ar.asset_type = 'Dashboard'
+	AND (
+		'{{doneCopy.selectedOptionValue}}' = ''
+		OR ar.ownership = '{{doneCopy.selectedOptionValue}}'
+	)
+	WHERE qm.user_email NOT IN (
+		'pugazharasan.a@assetplus.io', 
+		'awanish@assetplus.io',
+		'vishranth@assetplus.io',
+		'vetrivel.g@assetplus.io',
+		'vignesh.k@assetplus.io',
+		'saimohan.s@assetplus.io'
+	)
+	AND TO_CHAR(qm.triggered_at, 'YYYY-MM') = '{{Select2.selectedOptionValue}}'
+	AND qm.dashboard <> 'brokerage-consolidate-report'
+)
+SELECT 
+	total_users.total_dashboards,
+	total_users.total_unique_users,
+	active_users.active_users,
+	active_users.median_time_seconds,
+	active_users.p90_time_seconds,
+	slow_dashboards.slow_dashboard_count
+FROM total_users
+CROSS JOIN active_users
+CROSS JOIN slow_dashboards;

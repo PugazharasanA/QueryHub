@@ -1,0 +1,34 @@
+SELECT 
+    COUNT(DISTINCT user_email) AS total_logined_users,
+
+    ROUND(
+        (
+            PERCENTILE_CONT(0.50) 
+            WITHIN GROUP (ORDER BY execution_time_ms)
+            FILTER (WHERE execution_time_ms > 0)
+        )::numeric / 1000.0, 
+        2
+    ) AS median_time_seconds,
+
+    ROUND(
+        (
+            PERCENTILE_CONT(0.90) 
+            WITHIN GROUP (ORDER BY execution_time_ms)
+        )::numeric / 1000.0, 
+        2
+    ) AS p90_time_seconds
+
+FROM public."appsmith_query_monitor"
+
+WHERE user_email NOT IN (
+    'pugazharasan.a@assetplus.io', 
+    'awanish@assetplus.io',
+    'vishranth@assetplus.io',
+    'vetrivel.g@assetplus.io',
+    'vignesh.k@assetplus.io',
+    'saimohan.s@assetplus.io'
+)
+
+AND TO_CHAR(triggered_at, 'YYYY-MM') = '{{Select2.selectedOptionValue}}'
+
+AND dashboard <> 'brokerage-consolidate-report';

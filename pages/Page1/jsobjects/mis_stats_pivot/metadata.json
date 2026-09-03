@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a992ba9b756d46667ab2922_39abb4b2-8618-4590-b81e-43ee73880765",
+  "id": "Page1_mis_stats_pivot",
+  "unpublishedCollection": {
+    "name": "mis_stats_pivot",
+    "pageId": "Page1",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "pivotData",
+        "value": "[]"
+      }
+    ]
+  }
+}

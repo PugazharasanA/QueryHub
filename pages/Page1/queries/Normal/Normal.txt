@@ -1,0 +1,1 @@
+SELECT * FROM public."tickets" where (approvedby !='Rejected' or approvedby is null) and ticked_id like 'TKT%' and createdat >'2026-04-01';

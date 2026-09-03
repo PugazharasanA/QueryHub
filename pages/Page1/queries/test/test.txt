@@ -1,0 +1,75 @@
+WITH selected_month AS (
+    SELECT '{{Select1.selectedOptionValue}}' AS selected_ym
+),
+
+monthly_metrics AS (
+    SELECT
+        n8n_workflow_name,
+        COUNT(*)                                                                  AS total_runs,
+        COUNT(CASE WHEN issuccess = 'false' THEN 1 END)                           AS failure_count,
+        ROUND(
+            COUNT(CASE WHEN issuccess = 'true' THEN 1 END)::numeric
+            / NULLIF(COUNT(*), 0) * 100
+        , 2)                                                                      AS success_rate_pct,
+        ROUND(PERCENTILE_CONT(0.50) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                            AS median_duration_seconds,
+        ROUND(PERCENTILE_CONT(0.90) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                            AS p90_duration_seconds
+    FROM public.trigger_logs, selected_month
+    WHERE run_completed_at IS NOT NULL
+      AND run_start_at     IS NOT NULL
+      AND TO_CHAR(run_completed_at, 'YYYY-MM') = selected_ym
+    GROUP BY n8n_workflow_name
+),
+
+today_metrics AS (
+    SELECT
+        n8n_workflow_name,
+        COUNT(CASE WHEN issuccess = 'false' THEN 1 END)                           AS today_failure_count,
+        ROUND(PERCENTILE_CONT(0.90) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                            AS today_p90_duration_seconds
+    FROM public.trigger_logs
+    WHERE run_completed_at IS NOT NULL
+      AND run_start_at     IS NOT NULL
+      AND run_completed_at >= CURRENT_DATE
+      AND run_completed_at <  CURRENT_DATE + 1
+    GROUP BY n8n_workflow_name
+)
+
+SELECT
+    m.n8n_workflow_name,
+    m.total_runs,
+    m.failure_count,
+    m.success_rate_pct,
+    m.median_duration_seconds,
+    m.p90_duration_seconds,
+
+    -- Switches between today live data vs full month data
+    CASE
+        WHEN (SELECT selected_ym FROM selected_month)
+             = TO_CHAR(CURRENT_DATE, 'YYYY-MM')
+        THEN COALESCE(t.today_failure_count, 0)
+        ELSE m.failure_count
+    END                                                                           AS contextual_failure_count,
+
+    CASE
+        WHEN (SELECT selected_ym FROM selected_month)
+             = TO_CHAR(CURRENT_DATE, 'YYYY-MM')
+        THEN t.today_p90_duration_seconds
+        ELSE m.p90_duration_seconds
+    END                                                                           AS contextual_p90_seconds,
+
+    -- Frontend reads this to relabel the last two column headers
+    CASE
+        WHEN (SELECT selected_ym FROM selected_month)
+             = TO_CHAR(CURRENT_DATE, 'YYYY-MM')
+        THEN 'today'
+        ELSE 'month_end'
+    END                                                                           AS context_label
+
+FROM monthly_metrics m
+LEFT JOIN today_metrics t ON t.n8n_workflow_name = m.n8n_workflow_name
+ORDER BY m.total_runs DESC;

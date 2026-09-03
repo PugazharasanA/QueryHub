@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6a992ba9b756d46667ab2922_ac6654d6-e9e5-440e-8f48-c4fb7fb2f42f",
+  "id": "Page1_appsmith_logs",
+  "unpublishedCollection": {
+    "name": "appsmith_logs",
+    "pageId": "Page1",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

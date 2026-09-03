@@ -1,0 +1,3 @@
+UPDATE public."tickets" SET
+"insights" = '{{Input1.text}}'
+  WHERE ticked_id = {{TicketsCompletedInsights.triggeredRow.ticked_id}}; 

@@ -1,0 +1,16 @@
+{
+  "gitSyncId": "6a992ba9b756d46667ab2922_fe88956d-e7f7-4db5-98e9-4885d1dd0de3",
+  "id": "Page1_JSObject1",
+  "unpublishedCollection": {
+    "name": "JSObject1",
+    "pageId": "Page1",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": [
+      {
+        "name": "pivotData",
+        "value": "[]"
+      }
+    ]
+  }
+}

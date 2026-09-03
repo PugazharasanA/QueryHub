@@ -1,0 +1,10 @@
+SELECT 
+    asset_name,
+    ownership,
+		asset_type,
+    MAX(updated_at) AS max_updated_at
+FROM public.asset_registry
+WHERE 
+    '{{doneCopy.selectedOptionValue}}' = ''
+    OR ownership = '{{doneCopy.selectedOptionValue}}'
+GROUP BY asset_name, ownership, asset_type;

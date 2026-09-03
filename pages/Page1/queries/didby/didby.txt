@@ -1,0 +1,10 @@
+UPDATE public.tickets
+SET doneby = '{{done.selectedOptionValue}}'
+WHERE (ticked_id = '{{Tickets.triggeredRow.ticked_id}}')
+OR ( ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}')
+OR( ticked_id = '{{ TicketsCompletedMIS.triggeredRow.ticked_id }}')
+OR( ticked_id = '{{ TicketsCompletedInsights.triggeredRow.ticked_id }}')
+OR( ticked_id = '{{ TicketsCompletedDashboard.triggeredRow.ticked_id }}')
+OR( ticked_id = '{{ TicketsCompletedAI.triggeredRow.ticked_id }}')
+OR( ticked_id = '{{ TicketsCompletedAutomation.triggeredRow.ticked_id }}');
+

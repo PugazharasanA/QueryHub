@@ -1,0 +1,16 @@
+UPDATE tickets
+SET work_time_difference = calculate_office_minutesd(
+	requested_time::timestamp,
+	work_end_time::timestamp
+)
+WHERE ((email = '{{ TicketsonProgress.triggeredRow.email }}' AND ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}') OR
+			 (email = '{{ TicketsCompletedMIS.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedMIS.triggeredRow.ticked_id }}')
+			 OR
+			 (email = '{{ TicketsCompletedDashboard.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedDashboard.triggeredRow.ticked_id }}')
+			 OR
+			 (email = '{{ TicketsCompletedInsights.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedInsights.triggeredRow.ticked_id }}')
+			 OR
+			 (email = '{{ TicketsCompletedAutomation.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedAutomation.triggeredRow.ticked_id }}')
+			 OR
+			 (email = '{{ TicketsCompletedAI.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedAI.triggeredRow.ticked_id }}')
+			);

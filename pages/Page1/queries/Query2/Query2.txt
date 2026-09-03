@@ -1,0 +1,3 @@
+SELECT *
+FROM public.asset_registry
+WHERE asset_name = 'b2b-rm-kpi-sales';

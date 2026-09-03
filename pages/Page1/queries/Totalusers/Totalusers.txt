@@ -1,0 +1,34 @@
+SELECT 
+    COUNT(DISTINCT user_email) AS total_unique_users
+FROM (
+    SELECT DISTINCT ON (user_email, dashboard)
+        user_email,
+        dashboard,
+        workspace,
+        can_login,
+        updated_at
+    FROM public."appsmith_role_tracker"
+    
+    WHERE user_email NOT IN (
+        'pugazharasan.a@assetplus.io', 
+        'awanish@assetplus.io',
+        'vishranth@assetplus.io',
+        'vetrivel.g@assetplus.io',
+        'vignesh.k@assetplus.io',
+        'saimohan.s@assetplus.io'
+    ) 
+    
+    AND TO_CHAR(updated_at, 'YYYY-MM') <= '{{Select2.selectedOptionValue}}'
+    
+    ORDER BY user_email, dashboard, updated_at DESC
+
+) latest_records
+
+WHERE can_login = true 
+AND dashboard NOT IN (
+    'brokerage-operating-system',
+    'B2B RM KPI & Sales',
+    'cob-b2b',
+    'brokerage-consolidate-report'
+)
+AND workspace <> 'TESTING CONTEST DASHBOARD';

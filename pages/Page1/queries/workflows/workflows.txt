@@ -1,0 +1,57 @@
+WITH monthly AS (
+    SELECT
+        n8n_workflow_name,
+        COUNT(*)                                                                        AS total_runs,
+        COUNT(CASE WHEN issuccess = 'false' THEN 1 END)                                AS failure_count,
+        ROUND(
+            COUNT(CASE WHEN issuccess = 'true' THEN 1 END)::numeric / NULLIF(COUNT(*), 0) * 100
+        , 2)                                                                            AS success_rate_pct,
+        ROUND(PERCENTILE_CONT(0.50) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                                  AS median_duration_seconds,
+        ROUND(PERCENTILE_CONT(0.90) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                                  AS p90_duration_seconds
+    FROM public."trigger_logs"
+    WHERE run_completed_at IS NOT NULL
+    AND run_start_at IS NOT NULL
+    AND TO_CHAR(run_completed_at, 'YYYY-MM') = '{{Select1.selectedOptionValue}}'
+    GROUP BY n8n_workflow_name
+),
+today AS (
+    SELECT
+        n8n_workflow_name,
+        COUNT(*)                                                                        AS today_total_runs,
+        COUNT(CASE WHEN issuccess = 'false' THEN 1 END)                                AS today_failure_count,
+        ROUND(
+            COUNT(CASE WHEN issuccess = 'true' THEN 1 END)::numeric / NULLIF(COUNT(*), 0) * 100
+        , 2)                                                                            AS today_success_rate_pct,
+        ROUND(PERCENTILE_CONT(0.50) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                                  AS today_median_duration_seconds,
+        ROUND(PERCENTILE_CONT(0.90) WITHIN GROUP (
+            ORDER BY EXTRACT(EPOCH FROM (run_completed_at - run_start_at))
+        )::numeric, 2)                                                                  AS today_p90_duration_seconds
+    FROM public."trigger_logs"
+    WHERE run_completed_at IS NOT NULL
+    AND run_start_at IS NOT NULL
+    AND DATE(run_completed_at) = CURRENT_DATE
+    GROUP BY n8n_workflow_name
+)
+SELECT
+    m.n8n_workflow_name,
+    -- Monthly columns
+    m.total_runs,
+    m.failure_count,
+    m.success_rate_pct,
+    m.median_duration_seconds,
+    m.p90_duration_seconds,
+    -- Today columns
+    COALESCE(t.today_total_runs, 0)             AS today_total_runs,
+    COALESCE(t.today_failure_count, 0)          AS today_failure_count,
+    COALESCE(t.today_success_rate_pct, 0)       AS today_success_rate_pct,
+    t.today_median_duration_seconds,
+    t.today_p90_duration_seconds
+FROM monthly m
+LEFT JOIN today t ON m.n8n_workflow_name = t.n8n_workflow_name
+ORDER BY m.n8n_workflow_name;

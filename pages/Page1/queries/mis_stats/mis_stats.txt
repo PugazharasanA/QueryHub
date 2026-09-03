@@ -1,0 +1,38 @@
+SELECT 
+    TO_CHAR(closedat, 'Mon-YYYY') AS txnmonth,
+    COUNT(ticked_id) AS no_of_mis,
+		COUNT(CASE WHEN ai_tag IS NOT NULL THEN ticked_id END) AS no_of_ai_tickets,
+    COUNT(CASE WHEN ai_tag = 'Success' THEN ticked_id END) AS ai_success,
+    COUNT(CASE WHEN ai_tag = 'Partial Success' THEN ticked_id END) AS ai_partial_success,
+    COUNT(CASE WHEN ai_tag = 'Fail' THEN ticked_id END) AS ai_failure,
+    COUNT(CASE WHEN ai_tag IS NULL THEN ticked_id END) AS NON_ai_tickets,
+    SUM(CASE WHEN work_time_difference <= 540 THEN 1 ELSE 0 END) AS delivered_on_time,
+		ROUND(
+			SUM(CASE WHEN qc_passed = 'No' THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
+			2
+		) AS "QA Rejection Rate %",
+    ROUND(
+			SUM(CASE WHEN work_time_difference <= 540 THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
+			2
+		) AS "timeliness %",
+    ROUND(
+			SUM(CASE WHEN isescalation = 'No' THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
+			2
+		) AS "reliability %",
+    ROUND(
+			PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY work_time_difference)::numeric,
+			2
+		) AS median_time_taken
+FROM public."tickets"
+WHERE closedat >= '2026-04-01'
+  AND category = 'MIS'
+  AND requested_time IS NOT NULL
+  AND (
+		'{{doneCopy.selectedOptionValue}}' = ''
+		OR doneby = '{{doneCopy.selectedOptionValue}}'
+	)
+GROUP BY
+    TO_CHAR(closedat, 'Mon-YYYY'),
+    DATE_TRUNC('month', closedat)
+ORDER BY
+    DATE_TRUNC('month', closedat);

@@ -1,0 +1,6 @@
+UPDATE tickets
+SET work_start_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
+status ='onProgress'
+WHERE 
+  (ticked_id = '{{ Tickets.triggeredRow.ticked_id }}');
+
