@@ -723,7 +723,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{Qc_Table1.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_logs\"]))}}",
+      "computedValue": "{{Qc_Table1.processedTableData.map((currentRow, currentIndex) => {\n  const logs = currentRow.qc_logs || [];\n  if (!logs.length) return \"\";\n  const last = logs[logs.length - 1];\n  const statusLabel = last.qc_end_time ? (last.qc_passed === \"Yes\" ? \"Passed\" : \"Failed\") : \"In Progress\";\n  const dateStr = last.qc_end_time || last.qc_start_time || \"\";\n  return logs.length + \" attempt\" + (logs.length > 1 ? \"s\" : \"\") + \", last: \" + statusLabel + (dateStr ? \" on \" + dateStr : \"\");\n})}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
