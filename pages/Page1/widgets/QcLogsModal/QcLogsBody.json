@@ -37,7 +37,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "shouldTruncate": false,
-  "text": "{{appsmith.store.qcLogsModalText || \"No QC attempts yet.\"}}",
+  "text": "{{(function(){\n  const src = appsmith.store.qcLogsModalSource;\n  const row = src === \"Qc_Table1\" ? Qc_Table1.triggeredRow : Qc_Table.triggeredRow;\n  let logs = row ? row.qc_logs : [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  if (!logs || !logs.length) {\n    return \"No QC attempts yet.\";\n  }\n  return logs.map((log, i) => {\n    const start = log.qc_start_time || \"-\";\n    const end = log.qc_end_time || \"In Progress\";\n    const tag = log.qc_tag || \"-\";\n    const desc = log.qc_description || \"-\";\n    const notes = log.qc_notes;\n    let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Tag: \" + tag + \" | Description: \" + desc;\n    if (notes) {\n      line += \" | Remarks: \" + notes;\n    }\n    return line;\n  }).join(\"\\n\");\n})()}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,
