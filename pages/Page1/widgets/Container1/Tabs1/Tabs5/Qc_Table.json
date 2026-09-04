@@ -746,7 +746,7 @@
       "isVisible": true,
       "label": "qc_logs",
       "notation": "standard",
-      "onClick": "{{storeValue(\"qcLogsModalSource\", \"Qc_Table\").then(() => showModal(\"QcLogsModal\"));}}",
+      "onClick": "{{(async () => {\n  let logs = currentRow.qc_logs || [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  let text = \"No QC attempts yet.\";\n  if (logs && logs.length) {\n    text = logs.map((log, i) => {\n      const start = log.qc_start_time || \"-\";\n      const end = log.qc_end_time || \"In Progress\";\n      const tag = log.qc_tag || \"-\";\n      const desc = log.qc_description || \"-\";\n      const notes = log.qc_notes;\n      let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Tag: \" + tag + \" | Description: \" + desc;\n      if (notes) {\n        line += \" | Remarks: \" + notes;\n      }\n      return line;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"qcLogsModalText\", text);\n  showModal(\"QcLogsModal\");\n})();}}",
       "originalId": "qc_logs",
       "sticky": "",
       "textColor": "",
