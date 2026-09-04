@@ -1,14 +1,14 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 407,
+  "bottomRow": 24,
   "boxShadow": "none",
   "canEscapeKeyClose": true,
   "canOutsideClickClose": true,
   "children": [
     {
       "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-      "bottomRow": 410,
+      "bottomRow": 240,
       "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
       "canExtend": true,
       "detachFromLayout": true,
@@ -29,7 +29,7 @@
       "leftColumn": 0,
       "maxDynamicHeight": 9000,
       "minDynamicHeight": 4,
-      "minHeight": 560,
+      "minHeight": 410,
       "minWidth": 450,
       "mobileBottomRow": 560,
       "mobileLeftColumn": 0,
@@ -57,14 +57,14 @@
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
-  "height": 410,
+  "height": 240,
   "isCanvas": true,
   "isLoading": false,
   "key": "4wvx9qzjk4",
   "leftColumn": 10,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 24,
-  "minHeight": 410,
+  "minHeight": 240,
   "mobileBottomRow": 21,
   "mobileLeftColumn": 10,
   "mobileRightColumn": 34,
@@ -81,5 +81,5 @@
   "version": 2,
   "widgetId": "0yekxgoqny",
   "widgetName": "QcLogsModal",
-  "width": 456
+  "width": 1259.7
 }
