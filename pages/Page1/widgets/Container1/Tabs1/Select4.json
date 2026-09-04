@@ -25,7 +25,7 @@
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
-  "key": "5kmeabsz7j",
+  "key": "uxot1eey1a",
   "labelAlignment": "left",
   "labelPosition": "Top",
   "labelText": "Category",
@@ -43,7 +43,7 @@
   "optionLabel": "name",
   "optionValue": "code",
   "parentColumnSpace": 19.90625,
-  "parentId": "hll5r1rwxe",
+  "parentId": "q760pafava",
   "parentRowSpace": 10,
   "placeholderText": "Select option",
   "renderMode": "CANVAS",
@@ -54,6 +54,6 @@
   "topRow": 0,
   "type": "SELECT_WIDGET",
   "version": 1,
-  "widgetId": "agbbn2sulr",
-  "widgetName": "Select3"
+  "widgetId": "5974ugbkvm",
+  "widgetName": "Select4"
 }
