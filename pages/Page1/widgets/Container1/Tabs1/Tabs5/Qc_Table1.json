@@ -724,7 +724,7 @@
       "alias": "qc_logs",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "buttonLabel": "{{Qc_Table1.processedTableData.map((currentRow, currentIndex) => (\"View Logs\"))}}",
+      "buttonLabel": "{{Qc_Table1.processedTableData.map((currentRow, currentIndex) => ( Qc_Table1.processedTableData.map((currentRow, currentIndex) => (\"View Logs\"))))}}",
       "buttonVariant": "SECONDARY",
       "cellBackground": "",
       "columnType": "button",
