@@ -272,7 +272,7 @@
   "mobileTopRow": 0,
   "needsErrorInfo": false,
   "parentColumnSpace": 19.90625,
-  "parentId": "hll5r1rwxe",
+  "parentId": "jom9xtyvk5",
   "parentRowSpace": 10,
   "primaryColumns": {
     "ai_tag": {
@@ -1366,7 +1366,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "searchKey": "",
-  "tableData": "{{\n  Normal.data\n    .filter(row =>\n      row.status === \"Completed\" &&\n      (!row.qc_logs || row.qc_logs.length === 0 || !row.qc_logs[row.qc_logs.length - 1].qc_end_time) &&\n      (!Select3.selectedOptionValue ||\n      row.category === Select3.selectedOptionValue)\n    )\n    .sort((a, b) => new Date(b.closedat) - new Date(a.closedat))\n}}",
+  "tableData": "{{\n  Normal.data\n    .filter(row =>\n      row.status === \"Completed\" &&\n      (!Select3.selectedOptionValue ||\n      row.category === Select3.selectedOptionValue)\n    )\n    .sort((a, b) => new Date(b.closedat) - new Date(a.closedat))\n}}",
   "textSize": "0.875rem",
   "topRow": 8,
   "totalRecordsCount": 0,
