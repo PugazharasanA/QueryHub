@@ -74,7 +74,8 @@
     "requested_time": 204,
     "work_end_time": 229,
     "work_start_time": 210,
-    "work_time_difference": 233
+    "work_time_difference": 233,
+    "qc_logs": 150
   },
   "defaultPageSize": 0,
   "defaultSelectedRowIndex": 0,
@@ -255,7 +256,7 @@
       "key": "primaryColumns.qc_notes.computedValue"
     },
     {
-      "key": "primaryColumns.qc_logs.computedValue"
+      "key": "primaryColumns.qc_logs.buttonLabel"
     }
   ],
   "dynamicPropertyPathList": [
@@ -290,6 +291,9 @@
     },
     {
       "key": "primaryColumns.qc_passed.onClick"
+    },
+    {
+      "key": "primaryColumns.qc_logs.onClick"
     }
   ],
   "enableClientSideSearch": true,
@@ -837,8 +841,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_logs\"]))}}",
+      "columnType": "button",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -864,7 +867,10 @@
       "thousandSeparator": true,
       "validation": {},
       "verticalAlignment": "CENTER",
-      "width": 150
+      "width": 150,
+      "buttonLabel": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => (\"View Logs\"))}}",
+      "buttonVariant": "SECONDARY",
+      "onClick": "{{(async () => {\n  let logs = currentRow.qc_logs || [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  let text = \"No QC attempts yet.\";\n  if (logs && logs.length) {\n    text = logs.map((log, i) => {\n      const start = log.qc_start_time || \"-\";\n      const end = log.qc_end_time || \"In Progress\";\n      const passed = log.qc_end_time ? (log.qc_passed === \"Yes\" ? \"Yes\" : \"No\") : \"In Progress\";\n      const tag = log.qc_tag || \"-\";\n      const desc = log.qc_description || \"-\";\n      const notes = log.qc_notes;\n      let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Passed: \" + passed + \" | Tag: \" + tag + \" | Description: \" + desc;\n      if (notes) {\n        line += \" | Remarks: \" + notes;\n      }\n      return line;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"qcLogsModalText\", text);\n  showModal(\"QcLogsModal\");\n})();}}"
     },
     "qc_notes": {
       "alias": "qc_notes",
