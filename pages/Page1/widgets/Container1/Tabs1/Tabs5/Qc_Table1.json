@@ -724,6 +724,8 @@
       "alias": "qc_logs",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "buttonLabel": "{{Qc_Table1.processedTableData.map((currentRow, currentIndex) => (\"View Logs\"))}}",
+      "buttonVariant": "SECONDARY",
       "cellBackground": "",
       "columnType": "button",
       "currencyCode": "USD",
@@ -744,6 +746,7 @@
       "isVisible": true,
       "label": "qc_logs",
       "notation": "standard",
+      "onClick": "{{(async () => {\n  const logs = Qc_Table1.triggeredRow?.qc_logs || [];\n  let text = \"No QC attempts yet.\";\n  if (logs.length) {\n    text = logs.map((log, i) => {\n      const start = log.qc_start_time || \"-\";\n      const end = log.qc_end_time || \"In Progress\";\n      const tag = log.qc_tag || \"-\";\n      const desc = log.qc_description || \"-\";\n      const notes = log.qc_notes;\n      let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Tag: \" + tag + \" | Description: \" + desc;\n      if (notes) {\n        line += \" | Remarks: \" + notes;\n      }\n      return line;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"qcLogsModalText\", text);\n  showModal(\"QcLogsModal\");\n})();}}",
       "originalId": "qc_logs",
       "sticky": "",
       "textColor": "",
@@ -751,10 +754,7 @@
       "thousandSeparator": true,
       "validation": {},
       "verticalAlignment": "CENTER",
-      "width": 150,
-      "buttonLabel": "{{Qc_Table1.processedTableData.map((currentRow, currentIndex) => (\"View Logs\"))}}",
-      "buttonVariant": "SECONDARY",
-      "onClick": "{{(async () => {\n  const logs = Qc_Table1.triggeredRow?.qc_logs || [];\n  let text = \"No QC attempts yet.\";\n  if (logs.length) {\n    text = logs.map((log, i) => {\n      const start = log.qc_start_time || \"-\";\n      const end = log.qc_end_time || \"In Progress\";\n      const tag = log.qc_tag || \"-\";\n      const desc = log.qc_description || \"-\";\n      const notes = log.qc_notes;\n      let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Tag: \" + tag + \" | Description: \" + desc;\n      if (notes) {\n        line += \" | Remarks: \" + notes;\n      }\n      return line;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"qcLogsModalText\", text);\n  showModal(\"QcLogsModal\");\n})();}}"
+      "width": 150
     },
     "qc_notes": {
       "alias": "qc_notes",
