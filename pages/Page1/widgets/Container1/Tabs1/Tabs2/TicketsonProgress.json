@@ -61,9 +61,10 @@
     "qc_passed",
     "qc_tag",
     "qc_description",
-    "qc_notes"
+    "qc_notes",
+    "qc_logs"
   ],
-  "columnUpdatedAt": 1788419457061,
+  "columnUpdatedAt": 1788509629243,
   "columnWidthMap": {
     "closedat": 212,
     "createdby": 189,
@@ -252,6 +253,9 @@
     },
     {
       "key": "primaryColumns.qc_notes.computedValue"
+    },
+    {
+      "key": "primaryColumns.qc_logs.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -770,6 +774,40 @@
       "label": "qc_description",
       "notation": "standard",
       "originalId": "qc_description",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "qc_logs": {
+      "alias": "qc_logs",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{TicketsonProgress.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"qc_logs\"]))}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "CENTER",
+      "id": "qc_logs",
+      "index": 31,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "qc_logs",
+      "notation": "standard",
+      "originalId": "qc_logs",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
