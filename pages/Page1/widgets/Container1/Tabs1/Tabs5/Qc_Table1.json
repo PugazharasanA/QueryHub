@@ -847,7 +847,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "QC Start",
       "notation": "standard",
       "onClick": "{{qc_start.run().then(() => {\n  Normal.run();\n}).catch((error) => {\n  showAlert(\"Failed to start QC: \" + error.message, \"error\");\n});}}",
