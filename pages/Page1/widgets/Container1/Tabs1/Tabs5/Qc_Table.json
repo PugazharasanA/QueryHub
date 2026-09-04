@@ -71,7 +71,7 @@
     "createdat": 209,
     "file_link": 343,
     "qc_description": 356,
-    "qc_logs": 320,
+    "qc_logs": 150,
     "qc_tag": 257,
     "query": 640,
     "requested_time": 248,
@@ -229,7 +229,7 @@
       "key": "primaryColumns.qc_start.isDisabled"
     },
     {
-      "key": "primaryColumns.qc_logs.computedValue"
+      "key": "primaryColumns.qc_logs.buttonLabel"
     }
   ],
   "dynamicPropertyPathList": [
@@ -249,6 +249,9 @@
     },
     {
       "key": "primaryColumns.qc_start.onClick"
+    },
+    {
+      "key": "primaryColumns.qc_logs.onClick"
     }
   ],
   "enableClientSideSearch": true,
@@ -719,11 +722,10 @@
     },
     "qc_logs": {
       "alias": "qc_logs",
-      "allowCellWrapping": true,
+      "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => {\n  const logs = currentRow.qc_logs || [];\n  if (!logs.length) return \"\";\n  return logs.map((log, i) => {\n    const start = log.qc_start_time || \"-\";\n    const end = log.qc_end_time || \"In Progress\";\n    const tag = log.qc_tag || \"-\";\n    const desc = log.qc_description || \"-\";\n    const notes = log.qc_notes;\n    let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Tag: \" + tag + \" | Description: \" + desc;\n    if (notes) {\n      line += \" | Remarks: \" + notes;\n    }\n    return line;\n  }).join(\"\\n\");\n})}}",
+      "columnType": "button",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -749,7 +751,10 @@
       "thousandSeparator": true,
       "validation": {},
       "verticalAlignment": "CENTER",
-      "width": 320
+      "width": 150,
+      "buttonLabel": "{{Qc_Table.processedTableData.map((currentRow, currentIndex) => (\"View Logs\"))}}",
+      "buttonVariant": "SECONDARY",
+      "onClick": "{{(async () => {\n  const logs = Qc_Table.triggeredRow?.qc_logs || [];\n  let text = \"No QC attempts yet.\";\n  if (logs.length) {\n    text = logs.map((log, i) => {\n      const start = log.qc_start_time || \"-\";\n      const end = log.qc_end_time || \"In Progress\";\n      const tag = log.qc_tag || \"-\";\n      const desc = log.qc_description || \"-\";\n      const notes = log.qc_notes;\n      let line = \"Attempt \" + (i + 1) + \": Start \" + start + \" | End \" + end + \" | Tag: \" + tag + \" | Description: \" + desc;\n      if (notes) {\n        line += \" | Remarks: \" + notes;\n      }\n      return line;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"qcLogsModalText\", text);\n  showModal(\"QcLogsModal\");\n})();}}"
     },
     "qc_notes": {
       "alias": "qc_notes",
