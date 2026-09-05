@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "-- ONE-TIME MIGRATION. Run manually once before deploying the updated\n-- update_work_start / update_work_end / work_time_differnces queries.\n-- Safe to re-run (idempotent): adds the column if missing, and only backfills\n-- onProgress tickets that don't already have a work_logs entry.\n\nALTER TABLE public.tickets ADD COLUMN IF NOT EXISTS work_logs jsonb DEFAULT '[]'::jsonb;\n\nUPDATE public.tickets\nSET work_logs = jsonb_build_array(\n  jsonb_build_object(\n    'cycle', 1,\n    'work_start_time', to_char(work_start_time, 'YYYY-MM-DD HH24:MI:SS'),\n    'work_end_time', NULL,\n    'time_difference', NULL\n  )\n)\nWHERE status = 'onProgress'\n  AND work_start_time IS NOT NULL\n  AND (work_logs IS NULL OR work_logs = '[]'::jsonb);",
+      "body": "-- ONE-TIME MIGRATION. Run manually once before deploying the updated\n-- update_work_start / update_work_end / work_time_differnces queries.\n-- Safe to re-run (idempotent): adds the column if missing, and only backfills\n-- onProgress tickets that don't already have a work_logs entry.\n\nALTER TABLE public.tickets ADD COLUMN IF NOT EXISTS work_logs jsonb DEFAULT '[]'::jsonb;\n\nUPDATE public.tickets\nSET work_logs = jsonb_build_array(\n  jsonb_build_object(\n    'cycle', 1,\n    'work_start_time', to_char(work_start_time, 'YYYY-MM-DD HH24:MI:SS'),\n    'work_end_time', NULL,\n    'time_difference', NULL\n  )\n)\nWHERE status = 'onProgress'\n  AND work_start_time IS NOT NULL\n  AND (work_logs IS NULL OR work_logs = '[]'::jsonb);\n",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
