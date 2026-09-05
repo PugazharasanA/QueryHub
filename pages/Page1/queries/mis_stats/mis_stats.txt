@@ -10,7 +10,7 @@ SELECT
 		ROUND(
 			SUM(CASE WHEN qc_passed = 'No' THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
 			2
-		) AS "QA Rejection Rate %",
+		) AS "QC Rejection Rate %",
     ROUND(
 			SUM(CASE WHEN work_time_difference <= 540 THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
 			2
