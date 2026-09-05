@@ -1,4 +1,4 @@
-SELECT 
+SELECT
     TO_CHAR(closedat, 'Mon-YYYY') AS txnmonth,
     COUNT(ticked_id) AS no_of_mis,
 		COUNT(CASE WHEN ai_tag IS NOT NULL THEN ticked_id END) AS no_of_ai_tickets,
@@ -11,6 +11,30 @@ SELECT
 			SUM(CASE WHEN qc_passed = 'No' THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
 			2
 		) AS "QC Rejection Rate %",
+    COUNT(CASE WHEN jsonb_array_length(COALESCE(qc_logs, '[]'::jsonb)) > 0 THEN ticked_id END) AS no_of_qc_tickets,
+    COUNT(CASE WHEN (qc_logs -> 0 ->> 'qc_passed') = 'Yes' THEN ticked_id END) AS qc_passed_first_iteration,
+    COUNT(CASE WHEN (qc_logs -> 0 ->> 'qc_passed') = 'No' THEN ticked_id END) AS qc_failed_first_iteration,
+    ROUND(
+			COUNT(CASE WHEN (qc_logs -> 0 ->> 'qc_passed') = 'Yes' THEN ticked_id END) * 100.0
+			/ NULLIF(COUNT(CASE WHEN jsonb_array_length(COALESCE(qc_logs, '[]'::jsonb)) > 0 THEN ticked_id END), 0),
+			2
+		) AS "QC First Iteration Pass Rate %",
+    ROUND(
+			COUNT(CASE WHEN (qc_logs -> 0 ->> 'qc_passed') = 'No' THEN ticked_id END) * 100.0
+			/ NULLIF(COUNT(CASE WHEN jsonb_array_length(COALESCE(qc_logs, '[]'::jsonb)) > 0 THEN ticked_id END), 0),
+			2
+		) AS "QC First Iteration Fail Rate %",
+    ROUND(
+			(
+				PERCENTILE_CONT(0.5) WITHIN GROUP (
+					ORDER BY (
+						SELECT COALESCE(SUM((elem ->> 'time_difference')::numeric), 0)
+						FROM jsonb_array_elements(COALESCE(qc_logs, '[]'::jsonb)) elem
+					)
+				) FILTER (WHERE jsonb_array_length(COALESCE(qc_logs, '[]'::jsonb)) > 0)
+			)::numeric,
+			2
+		) AS "QC Median Time (mins)",
     ROUND(
 			SUM(CASE WHEN work_time_difference <= 540 THEN 1 ELSE 0 END) * 100.0 / COUNT(ticked_id),
 			2
