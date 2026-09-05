@@ -61,7 +61,8 @@
     "qc_passed",
     "qc_tag",
     "qc_description",
-    "qc_notes"
+    "qc_notes",
+    "work_logs"
   ],
   "columnUpdatedAt": 1788419531815,
   "columnWidthMap": {
@@ -228,6 +229,9 @@
     },
     {
       "key": "primaryColumns.qc_notes.computedValue"
+    },
+    {
+      "key": "primaryColumns.work_logs.buttonLabel"
     }
   ],
   "dynamicPropertyPathList": [
@@ -250,6 +254,9 @@
     },
     {
       "key": "primaryColumns.doneby.onClick"
+    },
+    {
+      "key": "primaryColumns.work_logs.onClick"
     }
   ],
   "enableClientSideSearch": true,
@@ -1288,6 +1295,42 @@
       "notation": "standard",
       "originalId": "work_time_difference",
       "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "work_logs": {
+      "alias": "work_logs",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "buttonLabel": "{{TicketsCompletedDashboard.processedTableData.map((currentRow, currentIndex) => (\"View Work Logs\"))}}",
+      "buttonVariant": "SECONDARY",
+      "cellBackground": "",
+      "columnType": "button",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "CENTER",
+      "id": "work_logs",
+      "index": 31,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "work_logs",
+      "notation": "standard",
+      "onClick": "{{(async () => {\n  let logs = currentRow.work_logs || [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  let text = \"No work iterations yet.\";\n  if (logs && logs.length) {\n    text = logs.map((log) => {\n      const start = log.work_start_time || \"-\";\n      const end = log.work_end_time || \"In Progress\";\n      const diff = log.time_difference != null ? log.time_difference + \" min\" : \"-\";\n      return \"Iteration \" + log.cycle + \": Start \" + start + \" | End \" + end + \" | Duration: \" + diff;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"workLogsModalText\", text);\n  showModal(\"WorkLogsModal\");\n})();}}",
+      "originalId": "work_logs",
+      "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

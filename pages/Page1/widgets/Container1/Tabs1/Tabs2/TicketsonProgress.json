@@ -62,7 +62,8 @@
     "qc_tag",
     "qc_description",
     "qc_notes",
-    "qc_logs"
+    "qc_logs",
+    "work_logs"
   ],
   "columnUpdatedAt": 1788528003543,
   "columnWidthMap": {
@@ -256,6 +257,9 @@
     },
     {
       "key": "primaryColumns.qc_logs.computedValue"
+    },
+    {
+      "key": "primaryColumns.work_logs.buttonLabel"
     }
   ],
   "dynamicPropertyPathList": [
@@ -290,6 +294,9 @@
     },
     {
       "key": "primaryColumns.doneby.onClick"
+    },
+    {
+      "key": "primaryColumns.work_logs.onClick"
     }
   ],
   "enableClientSideSearch": true,
@@ -1338,7 +1345,7 @@
       "isVisible": true,
       "label": "work_start_time",
       "notation": "standard",
-      "onClick": "{{\n(async () => {\n\ttry {\n\t\tconst triggeredRow =\n\t\t\tTicketsonProgress.triggeredRow ||\n\t\t\tTicketsonProgress.triggeredRow ||\n\t\t\tTicketsCompleted.triggeredRow;\n\n\t\tif (!triggeredRow) {\n\t\t\tshowAlert(\"No ticket row available.\", \"error\");\n\t\t\treturn;\n\t\t}\n\n\t\tconst status = \"Work Start\";\n\n\t\t// Run wordstart_time and get the result\n\t\tconst result = await wordstart_time.run();\n\t\tconst workStartTime = result[0]?.work_start_time;\n\n\t\tif (status === \"Work Start\") {\n\t\t\tawait update_work_start.run();\n\t\t} else if (status === \"Work End\") {\n\t\t\tif (!workStartTime) {\n\t\t\t\tshowAlert(\"Work start time is missing. Please start the work first.\", \"error\");\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tawait update_work_end.run();\n\t\t} else {\n\t\t\tshowAlert(\"Please select a valid work status option.\", \"error\");\n\t\t}\n\n\t\tcloseModal(\"workstatusmodal\");\n\t\tresetWidget(\"workstatus\");\n\n\n\n\t} catch (error) {\n\t\tshowAlert(\"An error occurred: \" + error.message, \"error\");\n\t}\n})().then(() => {\n\tNormal.run();\n});\n}}\n",
+      "onClick": "{{\n(async () => {\n    try {\n        const triggeredRow = TicketsonProgress.triggeredRow;\n        if (!triggeredRow) {\n            showAlert(\"No ticket row available.\", \"error\");\n            return;\n        }\n\n        const categoryResult = await get_category.run();\n        const category = categoryResult[0]?.category;\n        const categoryStr = category != null ? String(category).trim() : \"\";\n        if (!categoryStr || categoryStr === \"----\") {\n            showAlert(\"Please select a valid category before starting work.\", \"error\");\n            return;\n        }\n\n        await update_work_start.run();\n\n        closeModal(\"workstatusmodal\");\n        resetWidget(\"workstatus\");\n    } catch (error) {\n        showAlert(\"An error occurred: \" + error.message, \"error\");\n    }\n})().then(() => {\n    Normal.run();\n});\n}}\n",
       "originalId": "work_start_time",
       "sticky": "",
       "textSize": "0.875rem",
@@ -1377,13 +1384,49 @@
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
+    },
+    "work_logs": {
+      "alias": "work_logs",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "buttonLabel": "{{TicketsonProgress.processedTableData.map((currentRow, currentIndex) => (\"View Work Logs\"))}}",
+      "buttonVariant": "SECONDARY",
+      "cellBackground": "",
+      "columnType": "button",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "CENTER",
+      "id": "work_logs",
+      "index": 32,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "work_logs",
+      "notation": "standard",
+      "onClick": "{{(async () => {\n  let logs = currentRow.work_logs || [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  let text = \"No work iterations yet.\";\n  if (logs && logs.length) {\n    text = logs.map((log) => {\n      const start = log.work_start_time || \"-\";\n      const end = log.work_end_time || \"In Progress\";\n      const diff = log.time_difference != null ? log.time_difference + \" min\" : \"-\";\n      return \"Iteration \" + log.cycle + \": Start \" + start + \" | End \" + end + \" | Duration: \" + diff;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"workLogsModalText\", text);\n  showModal(\"WorkLogsModal\");\n})();}}",
+      "originalId": "work_logs",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
     }
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "searchKey": "",
-  "tableData": "{{\n  Normal.data\n    .filter(row =>\n  row.status === \"onProgress\" ||\n  (row.createdat >= '2026-04-01' && row.status === \"onProgress\" && row.approvedby !== \"Rejected\")\n)\n    .sort((a, b) => {\n      const getPriority = (item) => {\n        if (!item.approvedby) return 1; // Action\n        if (item.approvedby === \"Approved\" && item.status === \"Pending\") return 2;\n        if (item.approvedby === \"Approved\" && item.status === \"onProgress\") return 3;\n        if (item.approvedby === \"Approved\" && item.status === \"Completed\") return 4;\n        if (item.approvedby === \"Rejected\") return 5;\n        return 6;\n      };\n\n      const priorityA = getPriority(a);\n      const priorityB = getPriority(b);\n\n      if (priorityA !== priorityB) {\n        return priorityA - priorityB;\n      }\n\n      // Same priority group\n      if (priorityA === 4) {\n        // For Completed → most recent first\n        return new Date(b.createdat) - new Date(a.createdat);\n      }\n\n      // For all other groups → oldest first\n      return new Date(a.createdat) - new Date(b.createdat);\n    })\n}}\n",
+  "tableData": "{{\n  Normal.data\n    .filter(row =>\n  row.status === \"onProgress\" ||\n  (row.createdat >= '2026-04-01' && row.status === \"onProgress\" && row.approvedby !== \"Rejected\")\n)\n    .sort((a, b) => {\n      const getPriority = (item) => {\n        if (!item.approvedby) return 1; // Action\n        if (item.approvedby === \"Approved\" && item.status === \"Pending\") return 2;\n        if (item.approvedby === \"Approved\" && item.status === \"onProgress\") return 3;\n        if (item.approvedby === \"Approved\" && item.status === \"Completed\") return 4;\n        if (item.approvedby === \"Rejected\") return 5;\n        return 6;\n      };\n\n      const priorityA = getPriority(a);\n      const priorityB = getPriority(b);\n\n      if (priorityA !== priorityB) {\n        return priorityA - priorityB;\n      }\n\n      // Same priority group\n      if (priorityA === 4) {\n        // For Completed \u2192 most recent first\n        return new Date(b.createdat) - new Date(a.createdat);\n      }\n\n      // For all other groups \u2192 oldest first\n      return new Date(a.createdat) - new Date(b.createdat);\n    })\n}}\n",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": 0,

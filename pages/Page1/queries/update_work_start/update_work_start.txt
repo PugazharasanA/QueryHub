@@ -1,6 +1,27 @@
-UPDATE tickets
+WITH current_ticket AS (
+  SELECT COALESCE(work_logs, '[]'::jsonb) AS logs
+  FROM public.tickets
+  WHERE (ticked_id = '{{ Tickets.triggeredRow.ticked_id }}')
+     OR (ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}')
+)
+UPDATE public.tickets t
 SET work_start_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
-status ='onProgress'
-WHERE 
-  (ticked_id = '{{ Tickets.triggeredRow.ticked_id }}');
-
+    status = 'onProgress',
+    work_logs = c.logs || jsonb_build_array(
+      jsonb_build_object(
+        'cycle', jsonb_array_length(c.logs) + 1,
+        'work_start_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS'),
+        'work_end_time', NULL,
+        'time_difference', NULL
+      )
+    )
+FROM current_ticket c
+WHERE (
+    (t.ticked_id = '{{ Tickets.triggeredRow.ticked_id }}')
+    OR (t.ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}')
+  )
+  AND (
+    jsonb_array_length(c.logs) = 0
+    OR (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'work_end_time') IS NOT NULL
+  )
+RETURNING t.ticked_id;

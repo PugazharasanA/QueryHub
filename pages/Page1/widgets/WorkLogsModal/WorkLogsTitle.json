@@ -1,10 +1,10 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 21,
+  "bottomRow": 5,
   "dynamicBindingPathList": [
     {
-      "key": "text"
+      "key": "truncateButtonColor"
     },
     {
       "key": "fontFamily"
@@ -16,33 +16,33 @@
   "dynamicHeight": "AUTO_HEIGHT",
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "0.875rem",
-  "fontStyle": "REGULAR",
+  "fontSize": "1.25rem",
+  "fontStyle": "BOLD",
   "isLoading": false,
   "isVisible": true,
-  "key": "35aldlzz3k",
-  "leftColumn": 0,
+  "key": "3k3jk53kxx",
+  "leftColumn": 1,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 60,
+  "mobileBottomRow": 5,
   "mobileLeftColumn": 1,
-  "mobileRightColumn": 63,
-  "mobileTopRow": 6,
+  "mobileRightColumn": 41,
+  "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "originalBottomRow": 22,
-  "originalTopRow": 6,
-  "parentId": "w0eensqy29",
+  "overflow": "NONE",
+  "parentId": "ugtm8d9osf",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 41,
   "shouldTruncate": false,
-  "text": "{{appsmith.store.qcLogsModalText || \"No QC iterations yet.\"}}",
+  "text": "Work Log History",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 6,
+  "topRow": 1,
+  "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "t39fyz9mrp",
-  "widgetName": "QcLogsBody"
+  "widgetId": "zgmam890a7",
+  "widgetName": "WorkLogsTitle"
 }

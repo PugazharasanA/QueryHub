@@ -1,0 +1,19 @@
+-- ONE-TIME MIGRATION. Run manually once before deploying the updated
+-- update_work_start / update_work_end / work_time_differnces queries.
+-- Safe to re-run (idempotent): adds the column if missing, and only backfills
+-- onProgress tickets that don't already have a work_logs entry.
+
+ALTER TABLE public.tickets ADD COLUMN IF NOT EXISTS work_logs jsonb DEFAULT '[]'::jsonb;
+
+UPDATE public.tickets
+SET work_logs = jsonb_build_array(
+  jsonb_build_object(
+    'cycle', 1,
+    'work_start_time', to_char(work_start_time, 'YYYY-MM-DD HH24:MI:SS'),
+    'work_end_time', NULL,
+    'time_difference', NULL
+  )
+)
+WHERE status = 'onProgress'
+  AND work_start_time IS NOT NULL
+  AND (work_logs IS NULL OR work_logs = '[]'::jsonb);
