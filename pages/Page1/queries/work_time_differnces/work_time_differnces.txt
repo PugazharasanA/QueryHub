@@ -1,7 +1,8 @@
 UPDATE tickets
-SET work_time_difference = calculate_office_minutesd(
-	requested_time::timestamp,
-	work_end_time::timestamp
+SET work_time_difference = (
+	SELECT COALESCE(SUM((elem ->> 'time_difference')::numeric), 0)
+	FROM jsonb_array_elements(COALESCE(work_logs, '[]'::jsonb)) elem
+	WHERE elem ->> 'time_difference' IS NOT NULL
 )
 WHERE ((email = '{{ TicketsonProgress.triggeredRow.email }}' AND ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}') OR
 			 (email = '{{ TicketsCompletedMIS.triggeredRow.email }}' AND ticked_id = '{{ TicketsCompletedMIS.triggeredRow.ticked_id }}')

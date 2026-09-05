@@ -1,1 +1,2 @@
-SELECT category FROM tickets WHERE ticked_id = '{{Tickets.triggeredRow.ticked_id}}';
+SELECT category FROM tickets WHERE ticked_id = '{{Tickets.triggeredRow.ticked_id}}'
+OR ( ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}');

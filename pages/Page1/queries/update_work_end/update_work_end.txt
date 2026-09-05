@@ -1,11 +1,26 @@
-UPDATE tickets
-SET 
-  work_end_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
-  status = '{{ updatestatus.selectedOptionValue }}',
-  closedat = CASE 
-    WHEN '{{ updatestatus.selectedOptionValue }}' = 'Completed' 
-      THEN CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata'
-    ELSE closedat
-  END
-WHERE 
-  (ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}');
+WITH current_ticket AS (
+  SELECT COALESCE(work_logs, '[]'::jsonb) AS logs, requested_time
+  FROM public.tickets
+  WHERE ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}'
+)
+UPDATE public.tickets t
+SET work_end_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
+    status = 'Completed',
+    closedat = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
+    work_logs = jsonb_set(
+      c.logs,
+      ARRAY[(jsonb_array_length(c.logs) - 1)::text],
+      (c.logs -> (jsonb_array_length(c.logs) - 1)) || jsonb_build_object(
+        'work_end_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS'),
+        'time_difference',
+          CASE WHEN (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'cycle')::int = 1
+            THEN calculate_office_minutesd(c.requested_time::timestamp, (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp)
+            ELSE calculate_office_minutesd((c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'work_start_time')::timestamp, (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp)
+          END
+      )
+    )
+FROM current_ticket c
+WHERE t.ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}'
+  AND jsonb_array_length(c.logs) > 0
+  AND (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'work_end_time') IS NULL
+RETURNING t.ticked_id;
