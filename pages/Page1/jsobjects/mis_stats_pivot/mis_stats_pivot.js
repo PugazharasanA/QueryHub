@@ -49,7 +49,7 @@ export default {
 
 		const qcMetrics = [
 			{ label: 'QC Completed', key: 'no_of_qc_tickets' },
-			{ label: 'QC Failed (1st Iteration)', key: 'qc_failed_first_iteration' },
+			{ label: 'QC Failed', key: 'qc_failed_first_iteration' },
 			{ label: 'QC Rejection Rate %', key: 'QC First Iteration Fail Rate %' },
 			{ label: 'QC Median Time Taken (min)', key: 'QC Median Time (mins)' }
 		];
