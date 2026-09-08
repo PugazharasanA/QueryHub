@@ -1,54 +1,124 @@
 export default {
-	pivotData: [],
+	pivotMIS: [],
+	pivotAI: [],
+	pivotQC: [],
 
 	async getPivotData() {
 		await mis_stats.run();
 		const data = mis_stats.data;
 		if (!data || data.length === 0) {
-			this.pivotData = [];
-			return [];
+			this.pivotMIS = [];
+			this.pivotAI = [];
+			this.pivotQC = [];
+			return { mis: [], ai: [], qc: [] };
 		}
+
 		const months = [...new Set(data.map(row => row.txnmonth))].sort((a, b) =>
 																																		new Date('01-' + a) - new Date('01-' + b)
 																																	 );
-		const metricKeys = Object.keys(data[0]).filter(key => key !== 'txnmonth');
-		this.pivotData = metricKeys.map(key => {
-			const row = {
-				Metric: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-			};
+
+		const buildRows = (metrics) => metrics.map(({ label, key, derive }) => {
+			const row = { Metric: label };
 			months.forEach(month => {
 				const found = data.find(d => d.txnmonth === month);
-				row[month] = found !== undefined ? found[key] ?? 0 : 0;
+				row[month] = found === undefined ? 0 : derive ? derive(found) : found[key] ?? 0;
 			});
 			return row;
 		});
-		return this.pivotData;
+
+		const misMetrics = [
+			{ label: 'No. of MIS Tickets', key: 'no_of_mis' },
+			{ label: 'Delivered On Time', key: 'delivered_on_time' },
+			{ label: 'Timeliness %', key: 'timeliness %' },
+			{ label: 'Median Time Taken (min)', key: 'median_time_taken' }
+		];
+
+		const aiMetrics = [
+			{ label: 'AI Tickets', key: 'no_of_ai_tickets' },
+			{ label: 'AI Failed', key: 'ai_failure' },
+			{
+				label: 'AI Success Rate %',
+				derive: (row) => {
+					const total = Number(row.no_of_ai_tickets) || 0;
+					if (total === 0) return 0;
+					const success = (Number(row.ai_success) || 0) + (Number(row.ai_partial_success) || 0);
+					return Number(((success * 100) / total).toFixed(2));
+				}
+			}
+		];
+
+		const qcMetrics = [
+			{ label: 'QC Completed', key: 'no_of_qc_tickets' },
+			{ label: 'QC Failed (1st Iteration)', key: 'qc_failed_first_iteration' },
+			{ label: 'QC Rejection Rate %', key: 'QC First Iteration Fail Rate %' },
+			{ label: 'QC Median Time Taken (min)', key: 'QC Median Time (mins)' }
+		];
+
+		this.pivotMIS = buildRows(misMetrics);
+		this.pivotAI = buildRows(aiMetrics);
+		this.pivotQC = buildRows(qcMetrics);
+
+		return { mis: this.pivotMIS, ai: this.pivotAI, qc: this.pivotQC };
 	},
 
 	async getHTML() {
-		const pivotRows = await this.getPivotData();
+		const { mis, ai, qc } = await this.getPivotData();
 
-		if (!pivotRows.length) return `<html><body style="font-family:Arial,sans-serif;padding:20px;color:#888">No data found.</body></html>`;
+		if (!mis.length && !ai.length && !qc.length) {
+			return `<html><body style="font-family:Arial,sans-serif;padding:20px;color:#888">No data found.</body></html>`;
+		}
 
-		const columns = Object.keys(pivotRows[0]);
-		const months  = columns.slice(1);
+		const renderTable = (id, title, accent, rows) => {
+			if (!rows.length) return '';
+			const columns = Object.keys(rows[0]);
+			const months = columns.slice(1);
 
-		const headers = columns.map((c, i) =>
-																i === 0
-																? `<th class="sticky-col">${c}</th>`
-																: `<th>${c}</th>`
-															 ).join("");
+			const headers = columns.map((c, i) =>
+				i === 0 ? `<th class="sticky-col">${c}</th>` : `<th>${c}</th>`
+			).join("");
 
-		const body = pivotRows.map(row =>
-															 `<tr>${columns.map((c, i) => {
-			const val = row[c] ?? "";
-			return i === 0
-				? `<td class="sticky-col metric-col">${val}</td>`
-			: `<td>${typeof val === 'number' ? val.toFixed(2) : val}</td>`;
-		}).join("")}</tr>`
-															).join("");
+			const body = rows.map(row =>
+				`<tr>${columns.map((c, i) => {
+					const val = row[c] ?? "";
+					return i === 0
+						? `<td class="sticky-col metric-col">${val}</td>`
+						: `<td>${typeof val === 'number' ? val.toFixed(2) : val}</td>`;
+				}).join("")}</tr>`
+			).join("");
 
-		const tableDataJSON = JSON.stringify({ columns, months, rows: pivotRows });
+			return { id, title, accent, columns, months, rows, headers, body };
+		};
+
+		const tables = [
+			renderTable('mis', 'MIS', '#2b62c0', mis),
+			renderTable('ai', 'AI', '#7a5cff', ai),
+			renderTable('qc', 'QC', '#d4732c', qc)
+		].filter(Boolean);
+
+		const tablesJSON = JSON.stringify(
+			tables.reduce((acc, t) => {
+				acc[t.id] = { columns: t.columns, months: t.months, rows: t.rows, title: t.title };
+				return acc;
+			}, {})
+		);
+
+		const sections = tables.map(t => `
+        <section class="section">
+          <div class="header" style="border-left:4px solid ${t.accent}">
+            <div class="title">${t.title}</div>
+            <div class="actions">
+              <button class="btn csv" onclick="downloadCSV('${t.id}')">&#8595; CSV</button>
+              <button class="btn xl"  onclick="downloadXLSX('${t.id}')">&#8615; XLSX</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr>${t.headers}</tr></thead>
+              <tbody>${t.body}</tbody>
+            </table>
+          </div>
+        </section>
+    `).join("");
 
 		return `
       <html>
@@ -56,20 +126,19 @@ export default {
       <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; font-size: 13px; }
+        .section { margin-bottom: 22px; }
         .header {
           display: flex;
           align-items: center;
-          justify-content: flex-end;
-          padding: 12px 14px 10px;
-          border-bottom: 1px solid #e0e0e0;
+          justify-content: space-between;
+          padding: 10px 14px;
           background: #fff;
         }
         .title {
-          font-size: 16px;
+          font-size: 15px;
           font-weight: bold;
           color: #1a1a2e;
           letter-spacing: 0.3px;
-					text-align: center;
         }
         .actions {
           display: flex;
@@ -135,37 +204,24 @@ export default {
       </head>
       <body>
 
-        <div class="header">
-
-          <div class="actions">
-            <button class="btn csv" onclick="downloadCSV()">&#8595; CSV</button>
-            <button class="btn xl"  onclick="downloadXLSX()">&#8615; XLSX</button>
-          </div>
-        </div>
-
-        <div class="table-wrapper">
-          <table>
-            <thead><tr>${headers}</tr></thead>
-            <tbody>${body}</tbody>
-          </table>
-        </div>
+        ${sections}
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"><\/script>
         <script>
-          const TABLE_DATA = ${tableDataJSON};
+          const TABLES = ${tablesJSON};
 
-          function downloadCSV() {
-            const { columns, rows } = TABLE_DATA;
+          function downloadCSV(id) {
+            const { columns, rows, title } = TABLES[id];
             const head = columns.join(",");
             const lines = rows.map(r =>
               columns.map(c => '"' + (r[c] ?? "") + '"').join(",")
             );
             const csv = [head, ...lines].join("\\n");
-            trigger("mis_stats.csv", "data:text/csv;charset=utf-8," + encodeURIComponent(csv));
+            trigger(title.toLowerCase() + "_stats.csv", "data:text/csv;charset=utf-8," + encodeURIComponent(csv));
           }
 
-          function downloadXLSX() {
-            const { columns, rows } = TABLE_DATA;
+          function downloadXLSX(id) {
+            const { columns, rows, title } = TABLES[id];
             const sheetData = [
               columns,
               ...rows.map(r => columns.map(c => r[c] ?? ""))
@@ -173,8 +229,8 @@ export default {
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.aoa_to_sheet(sheetData);
             ws["!cols"] = [{ wch: 28 }, ...columns.slice(1).map(() => ({ wch: 14 }))];
-            XLSX.utils.book_append_sheet(wb, ws, "MIS Stats");
-            XLSX.writeFile(wb, "mis_stats.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, title + " Stats");
+            XLSX.writeFile(wb, title.toLowerCase() + "_stats.xlsx");
           }
 
           function trigger(filename, href) {
