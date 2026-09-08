@@ -8,7 +8,15 @@
     "pluginType": "JS",
     "variables": [
       {
-        "name": "pivotData",
+        "name": "pivotMIS",
+        "value": "[]"
+      },
+      {
+        "name": "pivotAI",
+        "value": "[]"
+      },
+      {
+        "name": "pivotQC",
         "value": "[]"
       }
     ]
