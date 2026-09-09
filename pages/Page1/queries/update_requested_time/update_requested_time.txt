@@ -1,0 +1,36 @@
+WITH current_ticket AS (
+  SELECT COALESCE(work_logs, '[]'::jsonb) AS logs
+  FROM public.tickets
+  WHERE ticked_id = '{{ TicketsCompletedMIS.updatedRow.ticked_id }}'
+),
+new_logs AS (
+  SELECT CASE
+    WHEN jsonb_array_length(logs) > 0
+      AND (logs -> 0 ->> 'cycle')::int = 1
+      AND (logs -> 0 ->> 'work_end_time') IS NOT NULL
+    THEN jsonb_set(
+      logs,
+      ARRAY['0'],
+      (logs -> 0) || jsonb_build_object(
+        'time_difference',
+        calculate_office_minutesd(
+          '{{ TicketsCompletedMIS.updatedRow.requested_time }}'::timestamp,
+          (logs -> 0 ->> 'work_end_time')::timestamp
+        )
+      )
+    )
+    ELSE logs
+  END AS logs
+  FROM current_ticket
+)
+UPDATE public.tickets t
+SET requested_time = '{{ TicketsCompletedMIS.updatedRow.requested_time }}'::timestamp,
+    work_logs = n.logs,
+    work_time_difference = (
+      SELECT COALESCE(SUM((elem ->> 'time_difference')::numeric), 0)
+      FROM jsonb_array_elements(n.logs) elem
+      WHERE elem ->> 'time_difference' IS NOT NULL
+    )
+FROM new_logs n
+WHERE t.ticked_id = '{{ TicketsCompletedMIS.updatedRow.ticked_id }}'
+RETURNING t.ticked_id;

@@ -203,6 +203,9 @@
       "key": "primaryColumns.requested_time.computedValue"
     },
     {
+      "key": "primaryColumns.requested_time.isCellEditable"
+    },
+    {
       "key": "primaryColumns.doneby.buttonColor"
     },
     {
@@ -272,6 +275,9 @@
     },
     {
       "key": "primaryColumns.qc_passed.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.requested_time.isCellEditable"
     }
   ],
   "dynamicTriggerPathList": [
@@ -301,6 +307,9 @@
     },
     {
       "key": "primaryColumns.work_logs.onClick"
+    },
+    {
+      "key": "onSubmit"
     }
   ],
   "enableClientSideSearch": true,
@@ -323,6 +332,7 @@
   "mobileRightColumn": 9,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
+  "onSubmit": "{{update_requested_time.run().then(() => {\n  Normal.run();\n  showAlert('Data Updated', 'success');\n}).catch(() => {\n  showAlert('Data Failed', 'error');\n});}}",
   "parentColumnSpace": 19.25,
   "parentId": "asg8fpfr6v",
   "parentRowSpace": 10,
@@ -1061,12 +1071,12 @@
       "horizontalAlignment": "CENTER",
       "id": "requested_time",
       "index": 23,
-      "isCellEditable": false,
+      "isCellEditable": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => ( appsmith.user.email === 'vetrivel.g@assetplus.io' ? true : false ))}}",
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": false,
+      "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "RequestedAt",
