@@ -1071,7 +1071,7 @@
       "horizontalAlignment": "CENTER",
       "id": "requested_time",
       "index": 23,
-      "isCellEditable": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => ( appsmith.user.email === 'vetrivel.g@assetplus.io' ? true : false ))}}",
+      "isCellEditable": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => ( ['vetrivel.g@assetplus.io','pugazharasan.a@assetplus.io'].includes(appsmith.user.email) ? true : false ))}}",
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
