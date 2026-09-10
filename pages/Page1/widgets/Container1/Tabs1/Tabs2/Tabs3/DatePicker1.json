@@ -5,9 +5,9 @@
   "bottomRow": 6,
   "boxShadow": "none",
   "closeOnSelection": true,
-  "dateFormat": "YYYY-MM-DD HH:mm",
+  "dateFormat": "YYYY-MM-DD",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "2026-09-10T05:37:07.719Z",
+  "defaultDate": "",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -17,6 +17,11 @@
     }
   ],
   "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "defaultDate"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "firstDayOfWeek": 0,
   "isDisabled": false,
@@ -47,7 +52,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 10,
   "shortcuts": false,
-  "timePrecision": "minute",
+  "timePrecision": "None",
   "topRow": 0,
   "type": "DATE_PICKER_WIDGET2",
   "version": 2,
