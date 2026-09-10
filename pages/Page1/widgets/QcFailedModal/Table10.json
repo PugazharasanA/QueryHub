@@ -37,9 +37,9 @@
   ],
   "columnUpdatedAt": 1789034195664,
   "columnWidthMap": {
-    "QC Tag": 180,
+    "Count": 100,
     "Description": 320,
-    "Count": 100
+    "QC Tag": 180
   },
   "defaultPageSize": 0,
   "defaultSelectedRowIndex": 0,
@@ -95,28 +95,28 @@
   "parentId": "7w7jhytfc9",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "QC Tag": {
-      "alias": "QC Tag",
+    "Count": {
+      "alias": "Count",
       "allowCellWrapping": true,
       "columnType": "text",
-      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"QC Tag\"]))}}",
+      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"Count\"]))}}",
       "enableFilter": true,
       "enableSort": true,
-      "horizontalAlignment": "LEFT",
-      "id": "QC Tag",
+      "horizontalAlignment": "CENTER",
+      "id": "Count",
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isEditable": false,
       "isVisible": true,
-      "label": "QC Tag",
-      "originalId": "QC Tag",
+      "label": "Count",
+      "originalId": "Count",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
       "verticalAlignment": "CENTER",
-      "width": 180
+      "width": 100
     },
     "Description": {
       "alias": "Description",
@@ -141,28 +141,28 @@
       "verticalAlignment": "CENTER",
       "width": 320
     },
-    "Count": {
-      "alias": "Count",
+    "QC Tag": {
+      "alias": "QC Tag",
       "allowCellWrapping": true,
       "columnType": "text",
-      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"Count\"]))}}",
+      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"QC Tag\"]))}}",
       "enableFilter": true,
       "enableSort": true,
-      "horizontalAlignment": "CENTER",
-      "id": "Count",
+      "horizontalAlignment": "LEFT",
+      "id": "QC Tag",
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isEditable": false,
       "isVisible": true,
-      "label": "Count",
-      "originalId": "Count",
+      "label": "QC Tag",
+      "originalId": "QC Tag",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
       "verticalAlignment": "CENTER",
-      "width": 100
+      "width": 180
     }
   },
   "renderMode": "CANVAS",
