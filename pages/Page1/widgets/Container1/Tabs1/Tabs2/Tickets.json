@@ -65,7 +65,7 @@
     "qc_logs",
     "work_logs"
   ],
-  "columnUpdatedAt": 1788447854897,
+  "columnUpdatedAt": 1789022556666,
   "columnWidthMap": {
     "createdby": 189,
     "doneby": 234,
@@ -810,7 +810,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "qc_logs",
       "notation": "standard",
       "originalId": "qc_logs",
