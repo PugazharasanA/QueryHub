@@ -30,7 +30,7 @@ export default {
 			{ label: 'No. of MIS Tickets', key: 'no_of_mis' },
 			{ label: 'Delivered On Time', key: 'delivered_on_time' },
 			{ label: 'Timeliness %', key: 'timeliness %' },
-			{ label: 'Median Time Taken (min)', key: 'median_time_taken' }
+			{ label: 'Request to Complete Median Time (min)', key: 'median_time_taken' }
 		];
 
 		const aiMetrics = [
@@ -91,8 +91,8 @@ export default {
 
 		const tables = [
 			renderTable('mis', 'MIS', '#2b62c0', mis),
-			renderTable('ai', 'AI', '#7a5cff', ai),
-			renderTable('qc', 'QC', '#d4732c', qc)
+			renderTable('qc', 'QC', '#d4732c', qc),
+			renderTable('ai', 'AI', '#7a5cff', ai)
 		].filter(Boolean);
 
 		const tablesJSON = JSON.stringify(
