@@ -61,6 +61,41 @@ export default {
 		return { mis: this.pivotMIS, ai: this.pivotAI, qc: this.pivotQC };
 	},
 
+	getQcFailedBreakdown(month) {
+		const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		const toTxnMonth = (dateStr) => {
+			const d = new Date(dateStr);
+			return MONTH_ABBR[d.getMonth()] + '-' + d.getFullYear();
+		};
+
+		const doneby = doneCopy.selectedOptionValue;
+		const rows = (Normal.data || []).filter(r =>
+			r.category === 'MIS' &&
+			r.requested_time != null &&
+			r.closedat != null &&
+			toTxnMonth(r.closedat) === month &&
+			(!doneby || r.doneby === doneby)
+		);
+
+		const groups = {};
+		rows.forEach(r => {
+			let logs = r.qc_logs;
+			if (typeof logs === 'string') {
+				try { logs = JSON.parse(logs); } catch (e) { logs = []; }
+			}
+			const first = Array.isArray(logs) && logs.length ? logs[0] : null;
+			if (!first || first.qc_passed !== 'No') return;
+
+			const tag = first.qc_tag || 'Unspecified';
+			const description = first.qc_description || 'Unspecified';
+			const key = tag + '||' + description;
+			if (!groups[key]) groups[key] = { tag, description, count: 0 };
+			groups[key].count++;
+		});
+
+		return Object.values(groups).sort((a, b) => b.count - a.count);
+	},
+
 	async getHTML() {
 		const { mis, ai, qc } = await this.getPivotData();
 
