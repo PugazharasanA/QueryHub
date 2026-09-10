@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 57,
+  "bottomRow": 65,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "canFreezeColumn": true,
   "childStylesheet": {
@@ -1554,7 +1554,7 @@
   "showInlineEditingOptionDropdown": true,
   "tableData": "{{\n  Normal.data\n    .filter(row => row.status === \"Completed\"&row.work_end_time>='2026-04-01'& (row.category==='MIS'|| row.category==null) & row.requested_time !=null & (row.requested_time < '2026-09-01' || row.qc_passed === 'Yes'))\n    .sort((a, b) => {\n      // Priority only needed if you plan to differentiate within \"Completed\"\n      const getPriority = (item) => {\n        if (item.approvedby==='Action') return 1;\n        if (item.approvedby === \"Approved\") return 2;\n        if (item.approvedby === \"Rejected\") return 3;\n        return 4;\n      };\n\n      const priorityA = getPriority(a);\n      const priorityB = getPriority(b);\n\n      if (priorityA !== priorityB) {\n        return priorityA - priorityB;\n      }\n\n      // Within same priority, show most recent first\n      return new Date(b.closedat) - new Date(a.closedat);\n    })\n}}\n",
   "textSize": "0.875rem",
-  "topRow": 0,
+  "topRow": 8,
   "totalRecordsCount": 0,
   "type": "TABLE_WIDGET_V2",
   "version": 2,
