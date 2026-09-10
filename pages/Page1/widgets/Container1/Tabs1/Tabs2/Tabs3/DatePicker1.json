@@ -7,13 +7,16 @@
   "closeOnSelection": true,
   "dateFormat": "YYYY-MM-DD",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "",
+  "defaultDate": "{{moment().format(\"YYYY-MM-DD\")}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "defaultDate"
     }
   ],
   "dynamicHeight": "FIXED",
