@@ -13,7 +13,12 @@ new_logs AS (
         calculate_office_minutesd(
           (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'work_start_time')::timestamp,
           (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp
-        )
+        ),
+      'time_difference',
+        CASE WHEN (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'cycle')::int = 1
+          THEN calculate_office_minutesd(c.requested_time::timestamp, (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp)
+          ELSE calculate_office_minutesd((c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'work_start_time')::timestamp, (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp)
+        END
     )
   ) AS logs
   FROM current_ticket c
