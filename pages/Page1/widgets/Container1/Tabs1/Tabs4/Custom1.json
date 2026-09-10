@@ -3,7 +3,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 104,
+  "bottomRow": 69,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "defaultModel": "{{ (() => { mis_stats_pivot.getHTML.data; return { mis: mis_stats_pivot.pivotMIS, qc: mis_stats_pivot.pivotQC, ai: mis_stats_pivot.pivotAI }; })() }}",
   "dynamicBindingPathList": [
@@ -47,7 +47,7 @@
   "parentId": "z6352jot5g",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
-  "rightColumn": 63,
+  "rightColumn": 64,
   "srcDoc": {
     "css": ".app {\n  width: calc(var(--appsmith-ui-width) * 1px);\n  font-family: Arial, sans-serif;\n  font-size: 13px;\n}\n\n.empty {\n  padding: 20px;\n  color: #888;\n  font-family: Arial, sans-serif;\n}\n\n.section { margin-bottom: 22px; }\n\n.header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 14px;\n  background: #fff;\n}\n\n.title {\n  font-size: 15px;\n  font-weight: bold;\n  color: #1a1a2e;\n  letter-spacing: 0.3px;\n}\n\n.actions { display: flex; gap: 8px; }\n\n.btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 5px;\n  padding: 6px 13px;\n  font-size: 12px;\n  font-family: Arial, sans-serif;\n  border-radius: 6px;\n  cursor: pointer;\n  border: none;\n}\n\n.btn.csv { background: #2b62c0; color: #fff; border: 1px solid #2b62c0; }\n.btn.csv:hover { background: #1e4ea0; }\n.btn.xl  { background: #1a7a4a; color: #fff; border: 1px solid #1a7a4a; }\n.btn.xl:hover  { background: #155f3a; }\n\n.table-wrapper { overflow-x: auto; width: 100%; }\ntable { border-collapse: collapse; width: 100%; }\n\nth {\n  background: #2b62c0;\n  color: white;\n  padding: 8px 12px;\n  text-align: center;\n  white-space: nowrap;\n}\n\ntd {\n  padding: 8px 12px;\n  text-align: center;\n  border-bottom: 1px solid #eee;\n  white-space: nowrap;\n}\n\n.sticky-col {\n  position: sticky;\n  left: 0;\n  z-index: 2;\n}\n\nthead .sticky-col { background: #2b62c0; z-index: 3; }\n\n.metric-col {\n  text-align: left;\n  font-weight: bold;\n  min-width: 200px;\n}\n\ntbody tr:nth-child(odd)  .sticky-col { background: #ffffff; }\ntbody tr:nth-child(even) .sticky-col { background: #f9f9f9; }\ntbody tr:hover           .sticky-col { background: #f0eeff; }\ntr:nth-child(even) td:not(.sticky-col) { background: #f9f9f9; }\ntr:hover           td:not(.sticky-col) { background: #f0eeff; }\n\n.sticky-col::after {\n  content: '';\n  position: absolute;\n  top: 0; right: -4px; bottom: 0;\n  width: 4px;\n  background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);\n  pointer-events: none;\n}\n",
     "html": "<!-- no need to write html, head, body tags, it is handled by the widget -->\n<div id=\"root\"></div>\n",
