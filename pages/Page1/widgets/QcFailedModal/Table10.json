@@ -30,9 +30,17 @@
       "menuColor": "{{appsmith.theme.colors.primaryColor}}"
     }
   },
-  "columnOrder": [],
+  "columnOrder": [
+    "QC Tag",
+    "Description",
+    "Count"
+  ],
   "columnUpdatedAt": 1789034195664,
-  "columnWidthMap": {},
+  "columnWidthMap": {
+    "QC Tag": 180,
+    "Description": 320,
+    "Count": 100
+  },
   "defaultPageSize": 0,
   "defaultSelectedRowIndex": 0,
   "defaultSelectedRowIndices": [
@@ -48,6 +56,18 @@
     },
     {
       "key": "boxShadow"
+    },
+    {
+      "key": "tableData"
+    },
+    {
+      "key": "primaryColumns.QC Tag.computedValue"
+    },
+    {
+      "key": "primaryColumns.Description.computedValue"
+    },
+    {
+      "key": "primaryColumns.Count.computedValue"
     }
   ],
   "dynamicPropertyPathList": [],
@@ -74,12 +94,82 @@
   "parentColumnSpace": 19.4953125,
   "parentId": "7w7jhytfc9",
   "parentRowSpace": 10,
-  "primaryColumns": {},
+  "primaryColumns": {
+    "QC Tag": {
+      "alias": "QC Tag",
+      "allowCellWrapping": true,
+      "columnType": "text",
+      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"QC Tag\"]))}}",
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "QC Tag",
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isEditable": false,
+      "isVisible": true,
+      "label": "QC Tag",
+      "originalId": "QC Tag",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "verticalAlignment": "CENTER",
+      "width": 180
+    },
+    "Description": {
+      "alias": "Description",
+      "allowCellWrapping": true,
+      "columnType": "text",
+      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"Description\"]))}}",
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "LEFT",
+      "id": "Description",
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isEditable": false,
+      "isVisible": true,
+      "label": "Description",
+      "originalId": "Description",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "verticalAlignment": "CENTER",
+      "width": 320
+    },
+    "Count": {
+      "alias": "Count",
+      "allowCellWrapping": true,
+      "columnType": "text",
+      "computedValue": "{{Table10.processedTableData.map((currentRow, currentIndex) => ( currentRow[\"Count\"]))}}",
+      "enableFilter": true,
+      "enableSort": true,
+      "horizontalAlignment": "CENTER",
+      "id": "Count",
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isEditable": false,
+      "isVisible": true,
+      "label": "Count",
+      "originalId": "Count",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "verticalAlignment": "CENTER",
+      "width": 100
+    }
+  },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "searchKey": "",
-  "tableData": "",
+  "tableData": "{{ appsmith.store.qcFailedBreakdownRows || [] }}",
   "textSize": "0.875rem",
   "topRow": 15,
   "totalRecordsCount": 0,

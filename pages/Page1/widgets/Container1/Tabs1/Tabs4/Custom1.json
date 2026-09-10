@@ -42,7 +42,7 @@
   "mobileRightColumn": 4,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onQcFailedClick": "{{ (() => {\n  const month = Custom1.model.qcFailedClick && Custom1.model.qcFailedClick.month;\n  if (!month) return;\n  const rows = mis_stats_pivot.getQcFailedBreakdown(month);\n  let text = \"No QC failed tickets for this month.\";\n  if (rows && rows.length) {\n    text = rows.map(r => r.tag + \" - \" + r.description + \": \" + r.count).join(\"\\n\");\n  }\n  Promise.all([\n    storeValue(\"qcFailedBreakdownMonth\", month),\n    storeValue(\"qcFailedBreakdownText\", text)\n  ]).then(() => showModal(\"QcFailedModal\"));\n})() }}",
+  "onQcFailedClick": "{{ (() => {\n  const month = Custom1.model.qcFailedClick && Custom1.model.qcFailedClick.month;\n  if (!month) return;\n  const rows = mis_stats_pivot.getQcFailedBreakdown(month);\n  const tableRows = rows.map(r => ({ \"QC Tag\": r.tag, \"Description\": r.description, \"Count\": r.count }));\n  const text = rows.length\n    ? rows.map(r => r.tag + \" - \" + r.description + \": \" + r.count).join(\"\\n\")\n    : \"No QC failed tickets for this month.\";\n  Promise.all([\n    storeValue(\"qcFailedBreakdownMonth\", month),\n    storeValue(\"qcFailedBreakdownText\", text),\n    storeValue(\"qcFailedBreakdownRows\", tableRows)\n  ]).then(() => showModal(\"QcFailedModal\"));\n})() }}",
   "parentColumnSpace": 19.59375,
   "parentId": "z6352jot5g",
   "parentRowSpace": 10,
