@@ -1342,7 +1342,7 @@
       "isVisible": true,
       "label": "work_logs",
       "notation": "standard",
-      "onClick": "{{(async () => {\n  let logs = currentRow.work_logs || [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  let text = \"No work iterations yet.\";\n  if (logs && logs.length) {\n    text = logs.map((log) => {\n      const start = log.work_start_time || \"-\";\n      const end = log.work_end_time || \"In Progress\";\n      const diff = log.time_difference != null ? log.time_difference + \" min\" : \"-\";\n      return \"Iteration \" + log.cycle + \": Start \" + start + \" | End \" + end + \" | Duration: \" + diff;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"workLogsModalText\", text);\n  showModal(\"WorkLogsModal\");\n})();}}",
+      "onClick": "{{(async () => {\n  let logs = currentRow.work_logs || [];\n  if (typeof logs === \"string\") {\n    try { logs = JSON.parse(logs); } catch (e) { logs = []; }\n  }\n  let text = \"No work iterations yet.\";\n  if (logs && logs.length) {\n    text = logs.map((log) => {\n      const start = log.work_start_time || \"-\";\n      const end = log.work_end_time || \"In Progress\";\n      const diff = log.work_time_duration != null ? log.work_time_duration + \" min\" : \"-\";\n      return \"Iteration \" + log.cycle + \": Start \" + start + \" | End \" + end + \" | Duration: \" + diff;\n    }).join(\"\\n\");\n  }\n  await storeValue(\"workLogsModalText\", text);\n  showModal(\"WorkLogsModal\");\n})();}}",
       "originalId": "work_logs",
       "sticky": "",
       "textColor": "",

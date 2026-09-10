@@ -9,7 +9,7 @@ new_logs AS (
     ARRAY[(jsonb_array_length(c.logs) - 1)::text],
     (c.logs -> (jsonb_array_length(c.logs) - 1)) || jsonb_build_object(
       'work_end_time', to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM-DD HH24:MI:SS'),
-      'time_difference',
+      'work_time_duration',
         calculate_office_minutesd(
           (c.logs -> (jsonb_array_length(c.logs) - 1) ->> 'work_start_time')::timestamp,
           (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::timestamp
@@ -24,9 +24,9 @@ SET work_end_time = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
     closedat = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata',
     work_logs = n.logs,
     time_difference = (
-      SELECT COALESCE(SUM((e ->> 'time_difference')::numeric), 0)
+      SELECT COALESCE(SUM((e ->> 'work_time_duration')::numeric), 0)
       FROM jsonb_array_elements(n.logs) e
-      WHERE e ->> 'time_difference' IS NOT NULL
+      WHERE e ->> 'work_time_duration' IS NOT NULL
     )
 FROM current_ticket c, new_logs n
 WHERE t.ticked_id = '{{ TicketsonProgress.triggeredRow.ticked_id }}'
