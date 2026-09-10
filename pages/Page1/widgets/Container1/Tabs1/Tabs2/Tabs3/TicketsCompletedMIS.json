@@ -66,7 +66,7 @@
     "work_logs",
     "EditActions1"
   ],
-  "columnUpdatedAt": 1788528061548,
+  "columnUpdatedAt": 1789017177674,
   "columnWidthMap": {
     "ai_tag": 145,
     "closedat": 197,
@@ -277,6 +277,9 @@
     },
     {
       "key": "primaryColumns.EditActions1.discardBorderRadius"
+    },
+    {
+      "key": "primaryColumns.EditActions1.isSaveVisible"
     }
   ],
   "dynamicPropertyPathList": [
@@ -291,6 +294,9 @@
     },
     {
       "key": "primaryColumns.requested_time.isCellEditable"
+    },
+    {
+      "key": "primaryColumns.EditActions1.isSaveVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -377,7 +383,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveDisabled": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => ( !TicketsCompletedMIS.updatedRowIndices.includes(currentIndex)))}}",
-      "isSaveVisible": true,
+      "isSaveVisible": "{{TicketsCompletedMIS.processedTableData.map((currentRow, currentIndex) => ( ['vetrivel.g@assetplus.io','pugazharasan.a@assetplus.io'].includes(appsmith.user.email) ? true : false ))}}",
       "isVisible": true,
       "label": "Save / Discard",
       "notation": "standard",
