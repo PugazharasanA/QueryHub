@@ -3,7 +3,7 @@
   "borderOpacity": 100,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": 1,
-  "bottomRow": 73,
+  "bottomRow": 104,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "dynamicBindingPathList": [
     {
@@ -35,7 +35,7 @@
   "rightColumn": 64,
   "source": "https://www.example.com",
   "srcDoc": "{{mis_stats_pivot.getHTML.data}}",
-  "topRow": 4,
+  "topRow": 35,
   "type": "IFRAME_WIDGET",
   "version": 1,
   "widgetId": "rhhyy6aj39",
