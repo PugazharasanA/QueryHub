@@ -86,8 +86,8 @@ export default {
 			const first = Array.isArray(logs) && logs.length ? logs[0] : null;
 			if (!first || first.qc_passed !== 'No') return;
 
-			const tag = first.qc_tag || 'Unspecified';
-			const description = first.qc_description || 'Unspecified';
+			const tag = (first.qc_tag || 'Unspecified').trim();
+			const description = (first.qc_description || 'Unspecified').trim().replace(/\s+/g, ' ').replace(/[.,]+$/, '');
 			const key = tag + '||' + description;
 			if (!groups[key]) groups[key] = { tag, description, count: 0 };
 			groups[key].count++;
